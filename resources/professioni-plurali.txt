@@ -1,51 +1,431 @@
+accompagnatori turistici
+addestratori cinofili
+addetti agli spurghi
+addetti ai guardaroba
+addetto agli altiforni
+addetto ai sondaggi
+af junior
 agenti di affari in mediazione
 agenti di assicurazione
 agenti di commercio
-rappresentanti di commercio
 agenti in attività finanziaria
+agricoltori
 agronomi
-forestali
-af junior
-zoonomi
-biotecnologi agrari
 agrotecnici
 agrotecnici laureati
+albergatori
+allenatori
+allevatori
+allevatori di alpaca
+alpini
+amanuensi
+amministratori delegati
+ammiragli
+analisti
+analisti finanziari
+annunciatori radiotelevisivi
+antennisti
+antropologi
+apicoltori
+arbitri
+archeologi
 architetti
 architetti junior
+archivisti
+armaioli
+arpisti
+artigiani
+ascensoristi
+assessori
+assessori al welfare
+assessori all'ambiente
+assessori alla cultura
+assessori allo sport
+assistenti di regia
+assistenti sociali
+astronomi
+atleti dilettanti
+atleti professionisti
+attori
+attori di cinema
+attori teatrali
+attrezzisti di scena
+autotrasportatori
+avicoltori
 avvocati
+baby sitter
+bagnino
+bancari
+banchieri
+banditori
+barbieri
+baristi
+barman
+becchini
+benzinai
+bersaglieri
+bibliotecari
+biochimici
 biologi
 biologi junior
+biomedici
+biotecnologi agrari
+body builder
+boscaioli
+botanici
+braccianti agricoli
 broker di assicurazione
-mediatori di assicurazione
+calciatori
+calzolai
+cameraman
+camerieri
+camerieri di bar
+cantanti
+cantanti di San Remo
+cantanti neomelodici
+cantanti pop
+cantanti rock
+cantinieri
+cantonieri
+capi del parlamento
+capi di stato
+capicantiere
+capistazione
+capitani di basket
+capitani di calcio
+capitani di rugby
+capitani marini
+capitreno
+carabinieri
+caramellai
+carpentieri
+carpentieri edili
+cartografi
+casalinghi
+casari
+cassieri
+cassieri di banca
+cavalieri
+ceramisti
+chefs
 chimici
 chimici junior
+chitarristi
+collezionisti
+comandanti di nave
+comis
 commercialisti
+commessi di supermercato
+compositori musicali
+conciatori
+conduttori radiofonici
+consiglieri comunali
 consulenti del lavoro
 consulenti in proprietà industriale
+consulenti informatici
+controllori
+corazzieri
+coreografi
+coristi
+corniciai
+cornisti
+correttori di bozze
+costumisti
+critici d'arte
+croupier
+cuochi
+cuochi ambulanti
+cuochi di fast food truck
+curatori di mostre
+decoratori
+decoratori vetrai
+dentisti
+deputati
+dermatologi
+designer
+designer di interni
+dietisti
+diplomatici
+direttori d'orchestra
+direttori pubblicitari
+dirigenti scolastici
+disegnatori
+disegnatori meccanici
+disk jockey
+dottori in filosofia
+economisti
+editor
+elettrauto
+elettricisti
+entomologi
+erboristi
+estetisti
+etnografi
+eurodeputati
+europarlamentari
+fabbri
+facchini
+falegnami
 farmacisti
+fashion designer
+fisici
+fisioterapisti
+floricultori
+food blogger
+forestali
+formaggiai
+fornai
+fotografi
+fotoreporter
+fresatori
+frutticultori
+fruttivendoli
+funzionari sindacali
+galleristi
+gelatai
+generali
+genetisti
+genii
 geologi
 geologi junior
 geometri
 geometri laureati
+giardinieri
 giornalisti
+giudici
+gommisti
+guardalinee
+guardia boschi
+guardie carcerarie
+guardie giurate
+guide alpine
+idraulici
+idrologi
+igienisti dentali
+imbianchini
+imbonitori
+impiegati
+impiegati di azienda
+impiegati di banca
+impiegati di uffici cambiavalori
+impiegati di ufficio
+imprenditori
+infermieri
 infermieri professionali
 ingegneri
+ingegneri civili
+ingegneri gestionali
 ingegneri junior
+insegnanti di sostegno
+installatori di condizionatori
+intagliatori di legno
+interpreti
+invasati
+investigatori privati
+istruttori
+istruttori di scuola guida
+istruttori di volo
+itticutori
+lattonieri
+lavandai
+lavapiatti
+linguisti
+liquidatori assicurativi
+litografi
+liutai
+logopedisti
+lombardi
+macchinisti
+macellai
+maestri d'asilo
+maestri di sci
+magazzinieri
+maggiordomi
+magliai
+manovali
+manovali edili
+manutentori
+marconisti
+marinaio
+marmisti
+maschere di sala
+massaggiatori
+massoterapisti
+matematici
+meccanici
+meccanici di biciclette
+meccanici di trattori
 mediatori creditizi
+mediatori di assicurazione
 medici chirurghi
 medici veterinari
+meridionali
+metallurgisti
+metalmeccanici
+meteorologi
+microbiologi
+minatori
+mobilieri
+modellatori
+modelle
+modelli
+modellisti
+montatori
+mosaicisti
+mozzi
+musicisti
+notai
 odontoiatri
+odontotecnici
+operai
+operatori ecologici
+optometristi
+orafi
+orologiai
+osteopati
 ostetriche
-periti assicurativi
+ottici
+pacifisti
+paleontologi
+panettieri
+parcheggiatori abusivi
+parrucchieri
+pasticcieri
+pastori
+pediatri
+pellettieri
+pellicciai
 periti agrari
 periti agrari laureati
+periti assicurativi
+periti commerciali
 periti industriali
 periti industriali laureati
+personal shopper
+pescatore
+pescivendoli
+pianisti
+piloni
+piloti
+piloti civili
+piloti di Formula1
+piloti di MotoGP
+piloti di Rally
+piloti di aerei
+piloti militari
+poliziotti
+pompieri
+ponteggiatori
+portalettere
+portieri
+portinai
+postini
+preparatori atletici
+presidenti
+presidenti del consiglio
+presidenti del senato
+presidenti della camera
+presidenti della repubblica
+presidenti di regione
+produttori cinematografi
+produttori televisivi
+professoresse
+professori
+progettisti d'interni
+progettisti software
+programmatori
+programmatori Java
+promoter
 promotori finanziari
+psichatri
 psicologi
 psicologi junior
+psicoterapeuti
+pubbliche relazioni
+pubblici ministeri
+pubblicisti
+quarterback
+quarti uomini
+raccattapalle
+radiologi
 ragionieri
-periti commerciali
+rappresentanti di commercio
+receptionist
+redattori editoriali
+registi
+registi cinematografi
+registi teatrali
+restauratori
 revisori contabili
+ricercatori
+rilegatori
+saldatori
+santoni indiani
+sarti
+sassofonisti
+scalpellini
+scenografi
+scribi
+scultori
+segretari
+selvicoltori
+semioti
+senatori
+shogun
+sindacalisti
+sindaci
+sociologi
+soldati
+sommelier
+sommozzatori
+sous-chefs
+spazzacamini
+spazzini
+spedizionieri
+stagisti
+stallieri
+statisti
+statistici
+stilisti
+storici
+studentesse
+studenti
+stuntman
+suggeritori
+suonatori
+taccheggiatori
+tappezzieri
+tassisti
+tecnici del suono
 tecnici di radiologia medica
+tecnici informatici
+tecnici luci
 tecnologi alimentari
+tenenti
+tessili
+tintori
+tiratori scelti
+tornitori
+traduttori
+trafilatori
+tramvieri
+traslocatori
+trivellatori
+trombettisti
+tronisti
+truccatori
+truffatori
+ufficiali
+vagabondi
+vasai
+veneti
+vetrai
+vetrinisti
+viaggiatori
+vigili del fuoco
+vigili urbani
+violinisti
+violoncellisti
+wedding planner
+zoologi
+zoonomi

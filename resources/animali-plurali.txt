@@ -342,7 +342,7 @@ sileno
 sogliole
 spatole
 spinarello
-spirografo
+spirografi
 sputacchina
 squali
 stambecchi
@@ -355,8 +355,8 @@ storni
 strillozzo
 struzzi
 sula
-suricato
-svasso
+suricati
+svassi
 tacchini
 taccole
 talpe
