@@ -1,63 +1,82 @@
-from .saint import Saint, Gender
-from datetime import datetime
-import random
-from PIL import Image, ImageDraw, ImageFont
-import openai
+import logging
 import os
+import random
+from datetime import datetime
+
+import openai
 import requests
+import toml
+from PIL import Image, ImageDraw, ImageFont
+
+from .saint import Gender, Saint
 
 
 class SaintFactory:
-    @staticmethod
-    def _loadFile(path: str) -> list[str]:
+    def __init__(self):
+        self._settings = self._loadSettings("settings.toml")
+        self._createFolderStructure()
+
+    def _loadFile(self, path: str) -> list[str]:
         """Loads a list of names from a file."""
         with open(path) as f:
             return [line.strip() for line in f]
 
-    @staticmethod
-    def _downloadImage(url: str, path: str) -> None:
-        """Downloads an image from a url and saves it to a path."""
+    def _loadSettings(self, path: str) -> dict[str, str]:
+        with open(path) as f:
+            return toml.load(f)["SaintFactory"]
+
+    def _createFolderStructure(self):
+        os.makedirs(self._settings["openai_folder"], exist_ok=True)
+        os.makedirs(self._settings["image_folder"], exist_ok=True)
+        os.makedirs(self._settings["toml_folder"], exist_ok=True)
+
+    def _downloadImage(self, url: str, path: str) -> None:
+        logging.info(f"Downloading image from {url}")
         r = requests.get(url, allow_redirects=True)
         open(path, "wb").write(r.content)
+        logging.info(f"Image downloaded to {path}")
 
-    @staticmethod
-    def _generatePrompt(saint: Saint) -> str:
-        base_prompt = f"Image of {saint.full_name} ({saint.born}-{saint.died})"
+    def _generatePrompt(self, saint: Saint) -> str:
+        logging.info("Generating prompt")
+
+        if saint.gender == Gender.Male:
+            gender = "man"
+        else:
+            gender = "woman"
+
+        base_prompt = (
+            f"Image of {saint.full_name} (a {gender}, born {saint.born} "
+            f"in {saint.birthplace} and died {saint.died} in {saint.birthplace})"
+        )
         styles = [
             "in the style of an Italian Renaissance painting",
             "in the style of a Baroque painting",
             "in the style of a Dutch Golden Age painting",
-            "in the style of a Flemish painting",
             "in the style of a russian icon",
+            "in a photo-realistic style",
         ]
-        return f"{base_prompt} {random.choice(styles)}."
+        prompt = f"{base_prompt} {random.choice(styles)}."
+        logging.info(f"Prompt generated: {prompt}")
+        return prompt
 
-    @staticmethod
-    def _downloadAIImage(saint: Saint) -> str:
-        api_key = SaintFactory._loadFile("resources/openai-api-key")[0]
-        openai.api_key = api_key
+    def _downloadAIImage(self, saint: Saint) -> str:
+        logging.info("Downloading AI image")
+        openai.api_key = self._settings["openai_key"]
+        logging.info("Requesting image from OpenAI")
         image_resp = openai.Image.create(
-            prompt=SaintFactory._generatePrompt(saint),
+            prompt=self._generatePrompt(saint),
             n=1,
             size="512x512",
         )
-        ...
+        logging.info("Image received from OpenAI")
         url = image_resp["data"][0]["url"]
-        ...
-        filename = SaintFactory._AIimageFilename()
-        SaintFactory._downloadImage(url, filename)
+        filename = self._AIimageFilename()
+        self._downloadImage(url, filename)
         return filename
 
-    def _AIimageFilename() -> str:
-        timestamp = datetime.today().strftime("%Y%m%d")
-        return f"img/openai-{timestamp}.png"
-
-    def _outImageFilename() -> str:
-        timestamp = datetime.today().strftime("%Y%m%d")
-        return f"img/{timestamp}.png"
-
-    @staticmethod
-    def _fitFont(text: str, font_size: int, font_path: str, max_width: float) -> int:
+    def _fitFont(
+        self, text: str, font_size: int, font_path: str, max_width: float
+    ) -> int:
         font_size = 100
         while True:
             font = ImageFont.FreeTypeFont(font_path, font_size)
@@ -72,12 +91,13 @@ class SaintFactory:
 
         return font_size
 
-    @staticmethod
-    def _generateImage(saint: Saint) -> str:
-        if not os.path.isfile(SaintFactory._AIimageFilename()):
-            SaintFactory._downloadAIImage(saint)
+    def _generateImage(self, saint: Saint) -> str:
+        logging.info("Generating image")
 
-        base_img = Image.open(SaintFactory._AIimageFilename())
+        if not os.path.isfile(self._AIimageFilename()):
+            self._downloadAIImage(saint)
+
+        base_img = Image.open(self._AIimageFilename())
         border_x = 32
         border_y = 192
 
@@ -91,7 +111,7 @@ class SaintFactory:
 
         font_path = "resources/fonts/AcciaPiano-LightItalic.ttf"
         font_line_scl = 0.8
-        font_size = SaintFactory._fitFont(
+        font_size = self._fitFont(
             text=text,
             font_size=100,
             font_path=font_path,
@@ -118,7 +138,7 @@ class SaintFactory:
         )
 
         font_line_scl = 0.4
-        font_size = SaintFactory._fitFont(
+        font_size = self._fitFont(
             text=subtext,
             font_size=100,
             font_path=font_path,
@@ -144,22 +164,27 @@ class SaintFactory:
             fill=(0, 0, 0, 255),
         )
 
-        out_img.save("img/out.png")
+        filename = self._outImageFilename()
+        out_img.save(filename)
+        logging.info(f"Image saved to {filename}")
 
-    @staticmethod
-    def generateSaint(seed: str = None) -> Saint:
-        if not seed:
-            seed = datetime.now().strftime("%Y%m%d")
+    def generateSaint(self) -> Saint:
+        logging.info("Generating saint")
+        if os.path.isfile(self._outSaintFilename()):
+            logging.info("Loading saint from file")
+            return Saint.fromTOML(self._outSaintFilename())
+
+        seed = datetime.now().strftime("%Y%m%d")
         random.seed(seed)
 
         gender = random.choice(["m", "f"])
         names = {
-            "m": SaintFactory._loadFile("resources/nomi-m.txt"),
-            "f": SaintFactory._loadFile("resources/nomi-f.txt"),
+            "m": self._loadFile("resources/nomi-m.txt"),
+            "f": self._loadFile("resources/nomi-f.txt"),
         }
-        animals = SaintFactory._loadFile("resources/animali-plurali.txt")
-        professions = SaintFactory._loadFile("resources/professioni-plurali.txt")
-        cities = SaintFactory._loadFile("resources/citta.txt")
+        animals = self._loadFile("resources/animali-plurali.txt")
+        professions = self._loadFile("resources/professioni-plurali.txt")
+        cities = self._loadFile("resources/citta.txt")
 
         name = random.choice(names[gender])
         protector_of = random.sample([*animals, *professions], random.randint(1, 4))
@@ -169,6 +194,7 @@ class SaintFactory:
         birthplace = random.choice(cities)
         deathplace = random.choice(cities)
 
+        logging.info("Generating saint")
         saint = Saint(
             gender=Gender(gender),
             name=name,
@@ -180,6 +206,33 @@ class SaintFactory:
             deathplace=deathplace,
         )
 
-        SaintFactory._generateImage(saint)
-        saint.image_path = SaintFactory._AIimageFilename()
+        logging.info("Generating image")
+        self._generateImage(saint)
+        logging.info("Saving saint to file")
+        saint.toTOML(self._outSaintFilename())
+        logging.info("Saint generated")
         return saint
+
+    def _AIimageFilename(self) -> str:
+        timestamp = datetime.today().strftime("%Y%m%d")
+        folder = self._settings["openai_folder"]
+        return f"{folder}/{timestamp}.png"
+
+    def _outImageFilename(self) -> str:
+        timestamp = datetime.today().strftime("%Y%m%d")
+        folder = self._settings["image_folder"]
+        return f"{folder}/{timestamp}.png"
+
+    def _outSaintFilename(self) -> str:
+        timestamp = datetime.today().strftime("%Y%m%d")
+        folder = self._settings["toml_folder"]
+        return f"{folder}/{timestamp}.toml"
+
+
+if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO)
+    logging.info("Starting")
+    f = SaintFactory()
+    saint = f.generateSaint()
+    print(saint)
+    logging.info("Done")
