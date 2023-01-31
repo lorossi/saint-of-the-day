@@ -78,6 +78,11 @@ class TelegramBot:
 
     async def _resetCommandHandler(self, update: Update, context: ContextTypes) -> None:
         logging.info("Received /reset command")
+        chat_id = update.effective_chat.id
+        if chat_id != self._settings["admin_chat_id"]:
+            logging.warning("Unauthorized access to /reset command")
+            return
+
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
             text="*Riavvio...*",
@@ -100,6 +105,10 @@ class TelegramBot:
         logging.error(f"Exception while handling an update: {context.error}")
         tb_list = traceback.format_exception(
             None, context.error, context.error.__traceback__
+        )
+        await context.bot.send_message(
+            chat_id=self._settings["admin_chat_id"],
+            text=f"Exception while handling an update: {context.error}",
         )
         logging.error(f"Traceback: {''.join(tb_list)}")
 
