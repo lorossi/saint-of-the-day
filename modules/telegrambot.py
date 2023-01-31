@@ -67,7 +67,7 @@ class TelegramBot:
         logging.info("Received /start command")
         chat_id = update.effective_chat.id
         text = (
-            "Benvenuto nel bot del santo del giorno!\n"
+            "*Benvenuto nel bot del santo del giorno!*\n"
             "Premi /santodelgiorno per conoscere il santo del giorno."
         )
         await context.bot.send_message(
@@ -121,6 +121,7 @@ class TelegramBot:
     ) -> None:
         logging.info("Received /santodelgiorno command")
         chat_id = update.effective_chat.id
+        await context.bot.send_chat_action(chat_id=chat_id, action="typing")
         saint = self._factory.generateSaint()
         image_path = saint.image_path
         await context.bot.send_photo(
