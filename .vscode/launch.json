@@ -5,10 +5,19 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Python: debug generator",
+      "name": "Python: create saint",
       "type": "python",
       "request": "launch",
-      "program": "${workspaceFolder}/saint_generator.py",
+      "program": "${workspaceFolder}/create_saint.py",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Python: launch bot",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/saint-of-the-day.py",
       "console": "integratedTerminal",
       "justMyCode": true
     }

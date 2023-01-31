@@ -2,3 +2,6 @@ venv
 __pycache__
 fonts/
 *key*
+settings.toml
+out/
+*.log

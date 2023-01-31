@@ -6,6 +6,10 @@
     "getbbox",
     "multicolumna",
     "openai",
+    "pytz",
+    "resp",
+    "santodelgiorno",
+    "telegrambot",
     "textbbox"
   ]
 }
