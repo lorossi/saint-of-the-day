@@ -20,6 +20,8 @@ class Saint:
         died: int,
         birthplace: str,
         deathplace: str,
+        image_path: str = None,
+        protector_of_english: list[str] = None,
     ):
         self._name = name
         self._gender = Gender(gender)
@@ -29,6 +31,12 @@ class Saint:
         self._died = died
         self._birthplace = birthplace
         self._deathplace = deathplace
+
+        if image_path is not None:
+            self._image_path = image_path
+
+        if protector_of_english is not None:
+            self._protector_of_english = protector_of_english
 
     def __repr__(self) -> str:
         bio = ""
@@ -71,6 +79,14 @@ class Saint:
     def bio(self) -> str:
         return self.__repr__()
 
+    @property
+    def image_path(self) -> str:
+        return self._image_path
+
+    @image_path.setter
+    def image_path(self, path: str) -> None:
+        self._image_path = path
+
     def __getattr__(self, name: str) -> Any:
         if name == "_male":
             return self._gender == Gender.Male
@@ -96,6 +112,7 @@ class Saint:
             "died": self._died,
             "birthplace": self._birthplace,
             "deathplace": self._deathplace,
+            "image_path": self._image_path,
         }
 
         with open(path, "w") as f:

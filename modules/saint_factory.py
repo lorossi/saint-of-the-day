@@ -45,8 +45,8 @@ class SaintFactory:
             gender = "woman"
 
         base_prompt = (
-            f"Image of {saint.full_name} (a {gender}, born {saint.born} "
-            f"in {saint.birthplace} and died {saint.died} in {saint.birthplace})"
+            f"Picture of {saint.full_name} (a {gender} and a saint), "
+            f"protector of {', '.join(saint.protector_of_english)} "
         )
         styles = [
             "in the style of an Italian Renaissance painting",
@@ -183,11 +183,29 @@ class SaintFactory:
             "f": self._loadFile("resources/nomi-f.txt"),
         }
         animals = self._loadFile("resources/animali-plurali.txt")
+        animals_english = self._loadFile("resources/animali-plurali-inglese.txt")
         professions = self._loadFile("resources/professioni-plurali.txt")
+        professions_english = self._loadFile(
+            "resources/professioni-plurali-inglese.txt"
+        )
         cities = self._loadFile("resources/citta.txt")
 
         name = random.choice(names[gender])
-        protector_of = random.sample([*animals, *professions], random.randint(1, 4))
+
+        protector_of_indexes = [
+            random.randint(0, len(animals) - 1),
+            random.randint(0, len(professions) - 1),
+        ]
+
+        protector_of = [
+            animals[protector_of_indexes[0]],
+            professions[protector_of_indexes[1]],
+        ]
+        protector_of_english = [
+            animals_english[protector_of_indexes[0]],
+            professions_english[protector_of_indexes[1]],
+        ]
+
         patron_city = random.choice(cities)
         born = random.randint(100, 1800)
         died = born + random.randint(20, 100)
@@ -204,10 +222,12 @@ class SaintFactory:
             died=died,
             birthplace=birthplace,
             deathplace=deathplace,
+            protector_of_english=protector_of_english,
         )
 
         logging.info("Generating image")
         self._generateImage(saint)
+        saint.image_path = self._outImageFilename()
         logging.info("Saving saint to file")
         saint.toTOML(self._outSaintFilename())
         logging.info("Saint generated")

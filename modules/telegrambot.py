@@ -122,7 +122,7 @@ class TelegramBot:
         logging.info("Received /santodelgiorno command")
         chat_id = update.effective_chat.id
         saint = self._factory.generateSaint()
-        image_path = self._factory._outImageFilename()
+        image_path = saint.image_path
         await context.bot.send_photo(
             chat_id=chat_id,
             photo=open(image_path, "rb"),
