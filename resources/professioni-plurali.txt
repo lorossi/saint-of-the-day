@@ -54,7 +54,7 @@ autotrasportatori
 avicoltori
 avvocati
 baby sitter
-bagnino
+bagnini
 bancari
 banchieri
 banditori
@@ -225,7 +225,7 @@ investigatori privati
 istruttori
 istruttori di scuola guida
 istruttori di volo
-itticutori
+itticultori
 lattonieri
 lavandai
 lavapiatti
@@ -246,7 +246,7 @@ manovali
 manovali edili
 manutentori
 marconisti
-marinaio
+marinai
 marmisti
 maschere di sala
 massaggiatori
@@ -337,7 +337,7 @@ programmatori
 programmatori Java
 promoter
 promotori finanziari
-psichatri
+psichiatri
 psicologi
 psicologi junior
 psicoterapeuti
