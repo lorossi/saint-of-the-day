@@ -46,6 +46,10 @@ class TelegramBot:
             self._generateSaint,
             when=0,
         )
+        self._job_queue.run_once(
+            self._botStarted,
+            when=0,
+        )
 
         self._application.add_error_handler(self._errorHandler)
 
@@ -115,6 +119,14 @@ class TelegramBot:
     async def _generateSaint(self, _: CallbackContext) -> None:
         logging.info("Generating new saint")
         self._factory.generateSaint()
+
+    async def _botStarted(self, _: CallbackContext) -> None:
+        logging.info("Bot started")
+        await self._application.bot.send_message(
+            chat_id=self._settings["admin_chat_id"],
+            text="*Bot avviato!*",
+            parse_mode=constants.ParseMode.MARKDOWN,
+        )
 
     async def _saintOfTheDayHandler(
         self, update: Update, context: ContextTypes
