@@ -8,13 +8,13 @@ from modules.saint_factory import SaintFactory
 def publish():
     s = SaintFactory()
     saint = s.generateSaint()
-    caption = saint.bio + "\n\n#santodelgiorno"
+    caption = saint.bio + "\n\n#santodelgiorno #santino_quotidiano"
     i = Instagram()
     i.uploadImage(image_path=saint.image_path, image_caption=caption)
 
 
 def main():
-    schedule.every().day.at("08.00").do(publish)
+    schedule.every().day.at("08:00").do(publish)
     while True:
         schedule.run_pending()
         time.sleep(1)
