@@ -236,17 +236,17 @@ class SaintFactory:
     def _AIimageFilename(self) -> str:
         timestamp = datetime.today().strftime("%Y%m%d")
         folder = self._settings["openai_folder"]
-        return f"{folder}/{timestamp}.png"
+        return f"{folder}{timestamp}.png"
 
     def _outImageFilename(self) -> str:
         timestamp = datetime.today().strftime("%Y%m%d")
         folder = self._settings["image_folder"]
-        return f"{folder}/{timestamp}.png"
+        return f"{folder}{timestamp}.png"
 
     def _outSaintFilename(self) -> str:
         timestamp = datetime.today().strftime("%Y%m%d")
         folder = self._settings["toml_folder"]
-        return f"{folder}/{timestamp}.toml"
+        return f"{folder}{timestamp}.toml"
 
 
 if __name__ == "__main__":
