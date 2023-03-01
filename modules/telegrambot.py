@@ -36,10 +36,16 @@ class TelegramBot:
         # add job to run at midnight
         timezone = pytz.timezone("UTC")
         midnight = datetime.time(0, 0, 0, tzinfo=timezone)
+        post_time = datetime.time(8, 0, 0, tzinfo=timezone)
 
         self._job_queue.run_daily(
             self._generateSaint,
             time=midnight,
+            days=(0, 1, 2, 3, 4, 5, 6),
+        )
+        self._job_queue.run_daily(
+            self._postSaint,
+            time=post_time,
             days=(0, 1, 2, 3, 4, 5, 6),
         )
         self._job_queue.run_once(
@@ -55,7 +61,7 @@ class TelegramBot:
 
         self._application.add_handlers(
             [
-                CommandHandler("santodelgiorno", self._saintOfTheDayHandler),
+                CommandHandler("santodelgiorno", self._startCommandHandler),
                 CommandHandler("start", self._startCommandHandler),
                 CommandHandler("reset", self._resetCommandHandler),
                 CommandHandler("ping", self._pingCommandHandler),
@@ -72,7 +78,9 @@ class TelegramBot:
         chat_id = update.effective_chat.id
         text = (
             "*Benvenuto nel bot del santo del giorno!*\n"
-            "Premi /santodelgiorno per conoscere il santo del giorno."
+            "Questo bot funziona da backend per il canale Telegram.\n"
+            f"Vieni a trovarci su {self._settings['channel_name']}. "
+            f"Link di invito: {self._settings['channel_url']}\n"
         )
         await context.bot.send_message(
             chat_id=chat_id,
@@ -120,26 +128,21 @@ class TelegramBot:
         logging.info("Generating new saint")
         self._factory.generateSaint()
 
+    async def _postSaint(self, _: CallbackContext) -> None:
+        logging.info("Posting saint")
+        saint = self._factory.generateSaint()
+        image_path = saint.image_path
+        await self._application.bot.send_photo(
+            chat_id=self._settings["channel_name"],
+            photo=open(image_path, "rb"),
+            caption=saint.bio,
+        )
+
     async def _botStarted(self, _: CallbackContext) -> None:
         logging.info("Bot started")
         await self._application.bot.send_message(
             chat_id=self._settings["admin_chat_id"],
             text="*Bot avviato!*",
-            parse_mode=constants.ParseMode.MARKDOWN,
-        )
-
-    async def _saintOfTheDayHandler(
-        self, update: Update, context: ContextTypes
-    ) -> None:
-        logging.info("Received /santodelgiorno command")
-        chat_id = update.effective_chat.id
-        await context.bot.send_chat_action(chat_id=chat_id, action="typing")
-        saint = self._factory.generateSaint()
-        image_path = saint.image_path
-        await context.bot.send_photo(
-            chat_id=chat_id,
-            photo=open(image_path, "rb"),
-            caption=f"*Santo del giorno:* {saint.bio}",
             parse_mode=constants.ParseMode.MARKDOWN,
         )
 
