@@ -9,6 +9,7 @@
     "openai",
     "pytz",
     "resp",
+    "santinoquotidiano",
     "santodelgiorno",
     "telegrambot",
     "textbbox"

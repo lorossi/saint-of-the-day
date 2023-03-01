@@ -12,7 +12,7 @@ def publish():
     logging.info("Publishing post")
     s = SaintFactory()
     saint = s.generateSaint()
-    caption = saint.bio + "\n\n#santodelgiorno #santino_quotidiano"
+    caption = saint.bio + "\n\n#santodelgiorno #santinoquotidiano"
     i = Instagram()
     i.uploadImage(image_path=saint.image_path, image_caption=caption)
     logging.info("Post published")
