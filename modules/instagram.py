@@ -47,9 +47,10 @@ class Instagram:
         delete_after = False
         if image_path.endswith(".png"):
             delete_after = True
-            image_path = image_path.replace(".png", ".jpg")
+            new_path = image_path.replace(".png", ".jpg")
             logging.info("Converting image to JPG")
-            Image.open(image_path).save(image_path)
+            Image.open(image_path).save(new_path)
+            image_path = new_path
 
         self._client.photo_upload(image_path, image_caption)
         logging.info(f"Image {image_path} uploaded to Instagram")
