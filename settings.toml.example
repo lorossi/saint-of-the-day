@@ -13,3 +13,4 @@ toml_folder = "out/toml/"
 [Instagram]
 username = ""
 password = ""
+temp_folder = "out/temp"

@@ -26,6 +26,7 @@ class SaintFactory:
             return toml.load(f)["SaintFactory"]
 
     def _createFolderStructure(self):
+        logging.info("Creating folder structure")
         os.makedirs(self._settings["openai_folder"], exist_ok=True)
         os.makedirs(self._settings["image_folder"], exist_ok=True)
         os.makedirs(self._settings["toml_folder"], exist_ok=True)

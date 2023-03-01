@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-import os
 import logging
+import os
 
 import toml
 from instagrapi import Client
@@ -17,7 +17,17 @@ class Instagram:
         """
         logging.info("Initializing Instagram")
         self._settings = self._loadSettings(path)
+        self._createTempFolder()
         self._login()
+
+    def _createTempFolder(self):
+        """Create folder structure."""
+        os.makedirs(self._settings["temp_folder"], exist_ok=True)
+
+    def _cleanTempFolder(self):
+        """Clean the temporary folder."""
+        for file in os.listdir(self._settings["temp_folder"]):
+            os.remove(os.path.join(self._settings["temp_folder"], file))
 
     def _loadSettings(self, path: str) -> dict:
         """Load settings from a TOML file.
@@ -40,7 +50,7 @@ class Instagram:
             f"Logged in to Instagram with username {self._settings['username']}"
         )
 
-    def _convertToJPEG(self, image_path: str) -> str:
+    def _convertToJPEG(self, image_path: str, destination: str) -> str:
         """Convert a PNG image to JPEG.
 
         Args:
@@ -50,12 +60,13 @@ class Instagram:
             str: Path to the JPEG image.
         """
         logging.info(f"Converting {image_path} to JPEG")
-        image = Image.open(image_path)
-        image = image.convert("RGB")
-        new_image_path = image_path.replace(".png", ".jpg")
-        image.save(new_image_path, "JPEG")
-        logging.info(f"Image converted to {new_image_path}")
-        return new_image_path
+
+        filename = image_path.split("/")[-1].split(".")[0]
+        image = Image.open(image_path).convert("RGB")
+        jpeg_path = os.path.join(destination, f"{filename}.jpg")
+        image.save(jpeg_path, "JPEG")
+        logging.info(f"Image converted to {jpeg_path}")
+        return jpeg_path
 
     def uploadImage(self, image_path: str, image_caption: str) -> None:
         """Upload an image to Instagram."""
@@ -64,11 +75,11 @@ class Instagram:
         delete_after = False
         if image_path.endswith(".png"):
             delete_after = True
-            image_path = self._convertToJPEG(image_path)
+            image_path = self._convertToJPEG(image_path, self._settings["temp_folder"])
 
         self._client.photo_upload(image_path, image_caption)
         logging.info(f"Image {image_path} uploaded to Instagram")
 
         if delete_after:
-            logging.info("Deleting temporary JPG")
-            os.remove(image_path)
+            logging.info("Cleaning temporary folder")
+            self._cleanTempFolder()
