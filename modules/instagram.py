@@ -1,3 +1,4 @@
+"""Module handling the logic to post images to Instagram."""
 from __future__ import annotations
 
 import logging
@@ -9,6 +10,8 @@ from PIL import Image
 
 
 class Instagram:
+    """Class handling the logic to post images to Instagram."""
+
     def __init__(self, path="settings.toml") -> Instagram:
         """Initialize the bot.
 
@@ -51,10 +54,10 @@ class Instagram:
         )
 
     def _convertToJPEG(self, image_path: str, destination: str) -> str:
-        """Convert a PNG image to JPEG.
+        """Convert an image to JPEG.
 
         Args:
-            image_path (str): Path to the PNG image.
+            image_path (str): Path to the source image.
 
         Returns:
             str: Path to the JPEG image.
@@ -69,11 +72,16 @@ class Instagram:
         return jpeg_path
 
     def uploadImage(self, image_path: str, image_caption: str) -> None:
-        """Upload an image to Instagram."""
+        """Upload an image to Instagram.
+
+        Args:
+            image_path (str): path of the image to upload
+            image_caption (str): caption of the image
+        """
         logging.info(f"Uploading image {image_path} to Instagram")
 
         delete_after = False
-        if image_path.endswith(".png"):
+        if not image_path.endswith(".jpg"):
             delete_after = True
             image_path = self._convertToJPEG(image_path, self._settings["temp_folder"])
 

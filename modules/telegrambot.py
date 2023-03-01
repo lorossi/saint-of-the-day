@@ -21,6 +21,8 @@ from modules.saint_factory import SaintFactory
 
 
 class TelegramBot:
+    """Class handling the logic of the telegram bot."""
+
     def __init__(self, settings_path: str = "settings.toml") -> TelegramBot:
         """Initialize the bot.
 
@@ -70,6 +72,14 @@ class TelegramBot:
         logging.info("Bot initialized")
 
     def _loadSettings(self, path: str) -> dict[str, str]:
+        """Load settings from a TOML file.
+
+        Args:
+            path (str): Path to the TOML file.
+
+        Returns:
+            dict[str, str]: Settings.
+        """
         with open(path) as f:
             return toml.load(f)[self.__class__.__name__]
 

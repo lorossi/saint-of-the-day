@@ -1,15 +1,22 @@
+"""Module containing the Saint class."""
 from __future__ import annotations
+
 from enum import Enum
-from typing_extensions import Any
+
 import toml
+from typing_extensions import Any
 
 
 class Gender(Enum):
+    """Enum containing the two possible genders of each saint."""
+
     Male = "m"
     Female = "f"
 
 
 class Saint:
+    """Class containing a saint."""
+
     def __init__(
         self,
         name: str,
@@ -22,7 +29,25 @@ class Saint:
         deathplace: str,
         image_path: str = None,
         protector_of_english: list[str] = None,
-    ):
+    ) -> Saint:
+        """Initialize the saint.
+
+        Args:
+            name (str): Name of the saint.
+            gender (Gender): Gender of the saint.
+            protector_of (list[str]): List of things the saint is the patron of.
+            patron_city (str): City (or town, hamlet) the saint is the patron of.
+            born (int): Birth year of the saint.
+            died (int): Death year of the saint.
+            birthplace (str): Birthplace of the saint.
+            deathplace (str): Deathplace of the saint.
+            image_path (str, optional): Path of the saint image. Defaults to None.
+            protector_of_english (list[str], optional): English translation \
+                 of the things the saint protects. Defaults to None.
+
+        Returns:
+            Saint: _description_
+        """
         self._name = name
         self._gender = Gender(gender)
         self._protector_of = [p.lower() for p in protector_of]
@@ -39,6 +64,7 @@ class Saint:
             self._protector_of_english = protector_of_english
 
     def __repr__(self) -> str:
+        """Return the string representation of the saint."""
         bio = ""
 
         if self._male:
@@ -73,21 +99,39 @@ class Saint:
         return bio
 
     def __str__(self) -> str:
+        """Return the string representation of the saint."""
         return self.__repr__()
 
     @property
     def bio(self) -> str:
+        """Return the string representation of the saint."""
         return self.__repr__()
 
     @property
     def image_path(self) -> str:
+        """Path of the saint image."""
         return self._image_path
 
     @image_path.setter
     def image_path(self, path: str) -> None:
+        """Set the path of the saint image."""
         self._image_path = path
 
     def __getattr__(self, name: str) -> Any:
+        """Get the attribute of the saint.
+
+        In addition to the attributes passed in the constructor,
+        it is possible to get the following attributes:
+
+        - full_name: Full name of the saint.
+        - full_patron_city: Full name of the patron city.
+
+        Args:
+            name (str): Name of the attribute.
+
+        Returns:
+            Any: Value of the attribute.
+        """
         if name == "_male":
             return self._gender == Gender.Male
         if name == "full_name":
@@ -103,6 +147,11 @@ class Saint:
             return self.__dict__[name]
 
     def toTOML(self, path: str) -> None:
+        """Save the saint to a TOML file.
+
+        Args:
+            path (str): Path of the TOML file.
+        """
         data = {
             "name": self._name,
             "gender": self._gender.value,
@@ -120,6 +169,14 @@ class Saint:
 
     @classmethod
     def fromTOML(cls, path: str) -> Saint:
+        """Load a saint from a TOML file.
+
+        Args:
+            path (str): Path of the TOML file.
+
+        Returns:
+            Saint: Saint loaded from the TOML file.
+        """
         with open(path, "r") as f:
             data = toml.load(f)
 
