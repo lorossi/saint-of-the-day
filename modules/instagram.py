@@ -1,7 +1,10 @@
 from __future__ import annotations
+
+import logging
+
 import toml
 from instagrapi import Client
-import logging
+from PIL import Image
 
 
 class Instagram:
@@ -39,5 +42,11 @@ class Instagram:
     def uploadImage(self, image_path: str, image_caption: str) -> None:
         """Upload an image to Instagram."""
         logging.info(f"Uploading image {image_path} to Instagram")
+
+        if image_path.endswith(".jpg"):
+            image_path = image_path.replace(".jpg", ".png")
+            logging.info("Converting image to PNG")
+            Image.open(image_path).save(image_path)
+
         self._client.photo_upload(image_path, image_caption)
         logging.info(f"Image {image_path} uploaded to Instagram")

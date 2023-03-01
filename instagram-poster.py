@@ -28,15 +28,18 @@ def main():
 
 
 if __name__ == "__main__":
-    filename = __file__.replace(".py", ".log")
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-        filename=filename,
-        filemode="w",
-    )
-
     if sys.argv[1] == "now":
+        logging.basicConfig(
+            level=logging.INFO,
+            format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+        )
         publish()
     else:
+        filename = __file__.replace(".py", ".log")
+        logging.basicConfig(
+            level=logging.INFO,
+            format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+            filename=filename,
+            filemode="w",
+        )
         main()
