@@ -40,6 +40,23 @@ class Instagram:
             f"Logged in to Instagram with username {self._settings['username']}"
         )
 
+    def _convertToJPEG(self, image_path: str) -> str:
+        """Convert a PNG image to JPEG.
+
+        Args:
+            image_path (str): Path to the PNG image.
+
+        Returns:
+            str: Path to the JPEG image.
+        """
+        logging.info(f"Converting {image_path} to JPEG")
+        image = Image.open(image_path)
+        image = image.convert("RGB")
+        new_image_path = image_path.replace(".png", ".jpg")
+        image.save(new_image_path, "JPEG")
+        logging.info(f"Image converted to {new_image_path}")
+        return new_image_path
+
     def uploadImage(self, image_path: str, image_caption: str) -> None:
         """Upload an image to Instagram."""
         logging.info(f"Uploading image {image_path} to Instagram")
@@ -47,10 +64,7 @@ class Instagram:
         delete_after = False
         if image_path.endswith(".png"):
             delete_after = True
-            new_path = image_path.replace(".png", ".jpg")
-            logging.info("Converting image to JPG")
-            Image.open(image_path).save(new_path)
-            image_path = new_path
+            image_path = self._convertToJPEG(image_path)
 
         self._client.photo_upload(image_path, image_caption)
         logging.info(f"Image {image_path} uploaded to Instagram")
