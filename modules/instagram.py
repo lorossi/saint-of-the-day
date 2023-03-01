@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import logging
 
 import toml
@@ -43,10 +44,16 @@ class Instagram:
         """Upload an image to Instagram."""
         logging.info(f"Uploading image {image_path} to Instagram")
 
-        if image_path.endswith(".jpg"):
-            image_path = image_path.replace(".jpg", ".png")
-            logging.info("Converting image to PNG")
+        delete_after = False
+        if image_path.endswith(".png"):
+            delete_after = True
+            image_path = image_path.replace(".png", ".jpg")
+            logging.info("Converting image to JPG")
             Image.open(image_path).save(image_path)
 
         self._client.photo_upload(image_path, image_caption)
         logging.info(f"Image {image_path} uploaded to Instagram")
+
+        if delete_after:
+            logging.info("Deleting temporary JPG")
+            os.remove(image_path)
