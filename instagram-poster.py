@@ -1,6 +1,8 @@
-import schedule
-import time
 import logging
+import sys
+import time
+
+import schedule
 
 from modules.instagram import Instagram
 from modules.saint_factory import SaintFactory
@@ -34,4 +36,7 @@ if __name__ == "__main__":
         filemode="w",
     )
 
-    main()
+    if sys.argv[1] == "now":
+        publish()
+    else:
+        main()
