@@ -1,0 +1,15 @@
+[TelegramBot]
+token = ""
+admin_chat_id = 0
+channel_url = ""
+channel_name = ""
+
+[SaintFactory]
+openai_key = ""
+openai_folder = "out/openai/"
+image_folder = "out/images/"
+toml_folder = "out/toml/"
+
+[Instagram]
+username = ""
+password = ""
