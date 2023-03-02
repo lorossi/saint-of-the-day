@@ -28,21 +28,25 @@ class InstagramPoster:
 
     def publish(self) -> None:
         """Publish a post."""
-        logging.info("Publishing post")
-        saint = self._factory.generateSaint()
-        caption = saint.bio + "\n\n#santodelgiorno #santinoquotidiano"
-        self._instagram.uploadImage(image_path=saint.image_path, image_caption=caption)
-        logging.info("Post published")
+        if not self._tryLogin():
+            return
+
+        self._tryPost()
 
     def start(self) -> None:
         """Loop the poster."""
         logging.info("Starting instagram poster")
+
         post_time_str = self._post_time.strftime("%H:%M")
-        schedule.every().day.at(post_time_str).do(self.publish)
+        schedule.every().day.at(post_time_str).do(self._tryPost)
         logging.info("Posts scheduled")
         while True:
-            schedule.run_pending()
-            time.sleep(1)
+            try:
+                schedule.run_pending()
+                time.sleep(1)
+            except KeyboardInterrupt:
+                logging.warning("Keyboard interrupt called. Exiting...")
+                return
 
     def _loadSettings(self, settings_path: str) -> dict:
         """Load settings from a toml file.
@@ -67,3 +71,52 @@ class InstagramPoster:
         return datetime.datetime.strptime(self._settings["post_time"], "%H:%M").replace(
             tzinfo=self._timezone
         )
+
+    def _tryLogin(self) -> bool:
+        """Try to login to Instagram.
+
+        Returns:
+            bool: True if the login was successful, False otherwise
+        """
+        logging.info("Logging into Instagram...")
+        tries = 0
+        while tries < self._settings["max_tries"]:
+            try:
+                self._instagram.login()
+                logging.info("Logged")
+                return True
+            except Exception as e:
+                logging.error(f"Error while logging in: {e}")
+                tries += 1
+                logging.info(
+                    f"Retrying in 10 seconds... ({tries}/"
+                    f"{self._settings['max_tries']})"
+                )
+                time.sleep(10)
+
+        logging.error("Aborting login after failed amounts.")
+        return False
+
+    def _tryPost(self) -> bool:
+        tries = 0
+        logging.info("Posting image....")
+        while tries < self._settings["max_tries"]:
+            try:
+                saint = self._factory.generateSaint()
+                caption = saint.bio + "\n\n#santodelgiorno #santinoquotidiano"
+                self._instagram.uploadImage(
+                    image_path=saint.image_path, image_caption=caption
+                )
+                logging.info("Image posted")
+                return True
+            except Exception as e:
+                logging.error(f"Error while posting: {e}")
+                tries += 1
+                logging.info(
+                    f"Retrying in 10 seconds... ({tries}/"
+                    f"{self._settings['max_tries']})"
+                )
+                time.sleep(10)
+
+        logging.error("Aborting post after failed amounts.")
+        return False

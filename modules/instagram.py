@@ -21,7 +21,6 @@ class Instagram:
         logging.info("Initializing Instagram")
         self._settings = self._loadSettings(path)
         self._createTempFolder()
-        self._login()
 
     def _createTempFolder(self) -> None:
         """Create folder structure."""
@@ -44,7 +43,7 @@ class Instagram:
         with open(path, "r") as f:
             return toml.load(f)[self.__class__.__name__]
 
-    def _login(self) -> None:
+    def login(self) -> None:
         """Login to Instagram."""
         logging.info("Logging in to Instagram")
         self._client = Client()

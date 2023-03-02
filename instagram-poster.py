@@ -13,7 +13,7 @@ def main(argv: list[str]) -> None:
     logging.info("Starting instagram poster")
     poster = InstagramPoster()
 
-    if len(argv) > 1 and "publish" in argv[1]:
+    if len(argv) > 1 and "now" in argv[1]:
         poster.publish()
         return
 

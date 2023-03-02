@@ -19,3 +19,4 @@ temp_folder = "out/temp"
 
 [InstagramPoster]
 post_time = "08:00"
+max_tries = 0
