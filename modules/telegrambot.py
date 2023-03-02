@@ -142,7 +142,7 @@ class TelegramBot:
             parse_mode=constants.ParseMode.MARKDOWN,
         )
 
-    async def _errorHandler(self, _: Update, context: ContextTypes):
+    async def _errorHandler(self, _: Update, context: ContextTypes) -> None:
         logging.error(f"Exception while handling an update: {context.error}")
         tb_list = traceback.format_exception(
             None, context.error, context.error.__traceback__
@@ -175,7 +175,7 @@ class TelegramBot:
             parse_mode=constants.ParseMode.MARKDOWN,
         )
 
-    def start(self):
+    def start(self) -> None:
         """Start the bot."""
         logging.info("Starting bot")
         self._application.run_polling()

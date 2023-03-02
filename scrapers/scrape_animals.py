@@ -25,7 +25,7 @@ def extract_animals(url: str) -> list[str]:
     return animals
 
 
-def main():
+def main() -> None:
     url = "https://www.animalpedia.it/nomi-di-animali-dalla-a-alla-z-3397.html"
     animals = extract_animals(url)
 

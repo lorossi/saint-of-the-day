@@ -22,7 +22,7 @@ def plural(name: str) -> str:
     return name
 
 
-def main():
+def main() -> None:
     with open("professioni.txt") as f:
         professions = f.read().splitlines()
 

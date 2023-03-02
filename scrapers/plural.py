@@ -11,7 +11,6 @@ def remove_spaces(s: str) -> str:
 
 
 def format_plural(plural: str) -> str:
-    ...
     if matches := re.search(r"^(\s*,?\s*:?\s*)?([a-z]+)(\s*,\s*)?$", plural):
         return matches.group(2)
     return plural
@@ -72,7 +71,7 @@ def convert_file(file_in: str, file_out: str) -> None:
             f.write(p + "\n")
 
 
-def main():
+def main() -> None:
     convert_file("animali.txt", "animali-plurali.txt")
 
 

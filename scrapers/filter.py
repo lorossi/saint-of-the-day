@@ -1,4 +1,4 @@
-def main():
+def main() -> None:
     with open("resources/professioni-plurali.txt") as f:
         lines = f.read().splitlines()
 

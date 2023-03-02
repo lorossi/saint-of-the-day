@@ -22,7 +22,7 @@ def extract_cities(url: str) -> list[str]:
     return cities
 
 
-def main():
+def main() -> None:
     urls = [
         "https://en.wikipedia.org/wiki/List_of_towns_and_cities_with_"
         "100,000_or_more_inhabitants/country:_A-B",

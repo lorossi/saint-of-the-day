@@ -37,7 +37,7 @@ def extract_names(url: str) -> tuple[list[str], list[str]]:
     return males, females
 
 
-def main():
+def main() -> None:
     names = {
         "m": [],
         "f": [],
