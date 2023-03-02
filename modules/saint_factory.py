@@ -353,12 +353,3 @@ class SaintFactory:
         timestamp = datetime.today().strftime("%Y%m%d")
         folder = self._settings["toml_folder"]
         return f"{folder}{timestamp}.toml"
-
-
-if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
-    logging.info("Starting")
-    f = SaintFactory()
-    saint = f.generateSaint()
-    print(saint)
-    logging.info("Done")
