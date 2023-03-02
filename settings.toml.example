@@ -3,6 +3,8 @@ token = ""
 admin_chat_id = 0
 channel_url = ""
 channel_name = ""
+post_time = "08:00"
+generate_time = "05:00"
 
 [SaintFactory]
 openai_key = ""
@@ -14,3 +16,6 @@ toml_folder = "out/toml/"
 username = ""
 password = ""
 temp_folder = "out/temp"
+
+[InstagramPoster]
+post_time = "08:00"
