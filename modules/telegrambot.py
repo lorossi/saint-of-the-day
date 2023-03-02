@@ -35,7 +35,6 @@ class TelegramBot:
         self._factory = SaintFactory()
         self._settings = self._loadSettings(settings_path)
         self._post_time = self._loadPostTime()
-        self._generateTime = self._loadGenerateTime()
         self._application = ApplicationBuilder().token(self._settings["token"]).build()
         self._job_queue = self._application.job_queue
 
@@ -43,16 +42,6 @@ class TelegramBot:
             self._postSaint,
             time=self._post_time,
             days=(0, 1, 2, 3, 4, 5, 6),
-        )
-        self._job_queue.run_daily(
-            self._generateSaint,
-            time=self._generateTime,
-            days=(0, 1, 2, 3, 4, 5, 6),
-        )
-
-        self._job_queue.run_once(
-            self._generateSaint,
-            when=0,
         )
         self._job_queue.run_once(
             self._botStarted,
@@ -152,10 +141,6 @@ class TelegramBot:
             text=f"Exception while handling an update: {context.error}",
         )
         logging.error(f"Traceback: {''.join(tb_list)}")
-
-    async def _generateSaint(self, _: CallbackContext) -> None:
-        logging.info("Generating new saint")
-        self._factory.generateSaint()
 
     async def _postSaint(self, _: CallbackContext) -> None:
         logging.info("Posting saint")
