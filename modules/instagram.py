@@ -23,11 +23,11 @@ class Instagram:
         self._createTempFolder()
         self._login()
 
-    def _createTempFolder(self):
+    def _createTempFolder(self) -> None:
         """Create folder structure."""
         os.makedirs(self._settings["temp_folder"], exist_ok=True)
 
-    def _cleanTempFolder(self):
+    def _cleanTempFolder(self) -> None:
         """Clean the temporary folder."""
         for file in os.listdir(self._settings["temp_folder"]):
             os.remove(os.path.join(self._settings["temp_folder"], file))

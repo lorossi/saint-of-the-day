@@ -4,7 +4,7 @@ import logging
 from modules.telegrambot import TelegramBot
 
 
-def main():
+def main() -> None:
     """Start the bot."""
     filename = __file__.replace(".py", ".log")
     logging.basicConfig(

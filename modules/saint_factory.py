@@ -50,7 +50,7 @@ class SaintFactory:
         with open(path) as f:
             return toml.load(f)["SaintFactory"]
 
-    def _createFolderStructure(self):
+    def _createFolderStructure(self) -> None:
         """Create folder structure. \
         The needed folders are in the settings.toml file."""
         logging.info("Creating folder structure")
@@ -58,7 +58,7 @@ class SaintFactory:
         os.makedirs(self._settings["image_folder"], exist_ok=True)
         os.makedirs(self._settings["toml_folder"], exist_ok=True)
 
-    def _downloadImage(self, url: str, path: str):
+    def _downloadImage(self, url: str, path: str) -> None:
         """Download an image from a URL.
 
         Args:
