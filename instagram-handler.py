@@ -6,18 +6,16 @@ from modules.instagram_poster import InstagramPoster
 
 def main() -> None:
     """Main function."""
-    logfile = __file__.replace(".py", ".log")
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-        filename=logfile,
-        filemode="w",
-    )
-
     logging.info("Starting instagram poster")
     poster = InstagramPoster()
     poster.start()
 
 
 if __name__ == "__main__":
+    logging.basicConfig(
+        level=logging.INFO,
+        filename= __file__.replace(".py", ".log"),
+        filemode="w",
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    )
     main()
