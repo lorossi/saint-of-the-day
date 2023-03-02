@@ -4,13 +4,15 @@ admin_chat_id = 0
 channel_url = ""
 channel_name = ""
 post_time = "08:00"
-generate_time = "05:00"
 
 [SaintFactory]
 openai_key = ""
 openai_folder = "out/openai/"
 image_folder = "out/images/"
 toml_folder = "out/toml/"
+
+[SaintCreator]
+generate_time = "05:00"
 
 [Instagram]
 username = ""
