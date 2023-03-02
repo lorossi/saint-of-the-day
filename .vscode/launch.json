@@ -5,6 +5,15 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Python: saint handler",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/saint-handler.py",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
       "name": "Python: create saint",
       "type": "python",
       "request": "launch",

@@ -51,7 +51,8 @@ class SaintCreator:
         logging.info("Starting saint creator loop")
         generate_time_str = self._generate_time.strftime("%H:%M")
         schedule.every().day.at(generate_time_str).do(self._generate)
-        logging.info("Saints generation scheduled")
+        next_run = schedule.next_run().isoformat()
+        logging.info(f"Saints generation scheduled for {next_run}")
         while True:
             try:
                 schedule.run_pending()
@@ -62,3 +63,6 @@ class SaintCreator:
 
     def _generate(self) -> None:
         self._factory.generateSaint()
+        logging.info("Saint generated")
+        next_run = schedule.next_run().isoformat()
+        logging.info(f"Saints generation scheduled for {next_run}")

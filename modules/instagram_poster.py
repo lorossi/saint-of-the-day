@@ -26,20 +26,24 @@ class InstagramPoster:
         self._settings = self._loadSettings(settings_path)
         self._post_time = self._loadPostTime()
 
-    def publish(self) -> None:
+    def upload(self) -> None:
         """Publish a post."""
         if not self._tryLogin():
             return
 
-        self._tryPost()
+        self._tryUpload()
+        logging.info("Upload done")
+        next_run = schedule.next_run().isoformat()
+        logging.info(f"Next post scheduled for {next_run}")
 
     def start(self) -> None:
         """Loop the poster."""
         logging.info("Starting instagram poster")
 
         post_time_str = self._post_time.strftime("%H:%M")
-        schedule.every().day.at(post_time_str).do(self._tryPost)
-        logging.info("Posts scheduled")
+        schedule.every().day.at(post_time_str).do(self.upload)
+        next_run = schedule.next_run().isoformat()
+        logging.info(f"Posts scheduled for {next_run}")
         while True:
             try:
                 schedule.run_pending()
@@ -97,7 +101,7 @@ class InstagramPoster:
         logging.error("Aborting login after failed amounts.")
         return False
 
-    def _tryPost(self) -> bool:
+    def _tryUpload(self) -> bool:
         tries = 0
         logging.info("Posting image....")
         while tries < self._settings["max_tries"]:
