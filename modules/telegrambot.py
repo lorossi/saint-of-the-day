@@ -23,6 +23,8 @@ from modules.saint_factory import SaintFactory
 class TelegramBot:
     """Class handling the logic of the telegram bot."""
 
+    _timezone: pytz.timezone = pytz.timezone("Europe/Rome")
+
     def __init__(self, settings_path: str = "settings.toml") -> TelegramBot:
         """Initialize the bot.
 
@@ -32,24 +34,22 @@ class TelegramBot:
         logging.info("Initializing bot")
         self._factory = SaintFactory()
         self._settings = self._loadSettings(settings_path)
-
+        self._post_time = self._loadPostTime()
+        self._generateTime = self._loadGenerateTime()
         self._application = ApplicationBuilder().token(self._settings["token"]).build()
         self._job_queue = self._application.job_queue
-        # add job to run at midnight
-        timezone = pytz.timezone("UTC")
-        midnight = datetime.time(0, 0, 0, tzinfo=timezone)
-        post_time = datetime.time(8, 0, 0, tzinfo=timezone)
 
         self._job_queue.run_daily(
-            self._generateSaint,
-            time=midnight,
+            self._postSaint,
+            time=self._post_time,
             days=(0, 1, 2, 3, 4, 5, 6),
         )
         self._job_queue.run_daily(
-            self._postSaint,
-            time=post_time,
+            self._generateSaint,
+            time=self._generateTime,
             days=(0, 1, 2, 3, 4, 5, 6),
         )
+
         self._job_queue.run_once(
             self._generateSaint,
             when=0,
@@ -83,13 +83,32 @@ class TelegramBot:
         with open(path) as f:
             return toml.load(f)[self.__class__.__name__]
 
+    def _loadPostTime(self) -> datetime.time:
+        """Load the time at which the bot posts the saint.
+
+        Returns:
+            datetime.time: Time at which the bot posts the saint.
+        """
+        return datetime.datetime.strptime(self._settings["post_time"], "%H:%M").replace(
+            tzinfo=self._timezone
+        )
+
+    def _loadGenerateTime(self) -> datetime.time:
+        """Load the time at which the bot generates the saint.
+
+        Returns:
+            datetime.time: Time at which the bot generates the saint.
+        """
+        return datetime.datetime.strptime(
+            self._settings["generate_time"], "%H:%M"
+        ).replace(tzinfo=self._timezone)
+
     async def _startCommandHandler(self, update: Update, context: ContextTypes) -> None:
         logging.info("Received /start command")
         chat_id = update.effective_chat.id
         text = (
-            "*Benvenuto nel bot del santo del giorno!*\n"
-            "Questo bot funziona da backend per il canale Telegram.\n"
-            f"Vieni a trovarci su {self._settings['channel_name']}. "
+            "*Benvenuto nel bot del Santino Quotidiano!*\n\n"
+            f"Vieni a trovarci su {self._settings['channel_name']}\n"
             f"Link di invito: {self._settings['channel_url']}\n"
         )
         await context.bot.send_message(
