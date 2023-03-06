@@ -1,3 +1,4 @@
+"""This module contains the class handling the logic of the saint creator."""
 from __future__ import annotations
 
 import logging
@@ -11,6 +12,7 @@ class SaintCreator(Scheduler):
     """Class handling the logic of the saint creator."""
 
     def __init__(self) -> SaintCreator:
+        """Initialize the creator."""
         super().__init__()
         self._generate_time = self.loadScheduleTime("generate_time")
         self._factory = SaintFactory()

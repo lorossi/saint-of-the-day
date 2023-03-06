@@ -36,6 +36,7 @@ class InstagramPoster(Scheduler):
         logging.info("Upload done")
 
     def _uploadImage(self) -> None:
+        """Upload the image."""
         saint = self._factory.generateSaint()
         caption = saint.bio + "\n\n#santodelgiorno #santinoquotidiano"
         self._instagram.uploadImage(image_path=saint.image_path, image_caption=caption)
