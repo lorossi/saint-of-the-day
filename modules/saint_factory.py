@@ -118,6 +118,18 @@ class SaintFactory:
             "in the style of a 2000s pop album cover",
             "in the style of a grunge album cover",
             "in a low-poly style",
+            "in the style of a 90s anime",
+            "in the style of a disney movie",
+            "in the style of a Leonardo Da Vinci drawing",
+            "in the style of a Van Gogh painting",
+            "in the style of a Monet painting",
+            "in the style of a Cezanne painting",
+            "in the style of a Matisse painting",
+            "in the style of a Klimt painting",
+            "in the style of a 1920s black and white movie",
+            "in the style of a 1950s black and white movie",
+            "in the style of a 1970s sci-fi movie",
+            "in the style of a Marvel comic book",
         ]
         prompt = f"{base_prompt} {random.choice(styles)}."
         logging.info(f"Prompt generated: {prompt}")
