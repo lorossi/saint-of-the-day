@@ -144,7 +144,7 @@ class TelegramBot:
         )
         logging.error(f"Traceback: {''.join(tb_list)}")
 
-    async def _postSaint(self, **_: Any) -> None:
+    async def _postSaint(self, *_: Any, **__: Any) -> None:
         logging.info("Posting saint")
         saint = self._factory.generateSaint()
         image_path = saint.image_path
