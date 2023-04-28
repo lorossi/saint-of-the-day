@@ -1,5 +1,6 @@
 """This module contains the logic of the telegram bot."""
 from __future__ import annotations
+from typing import Any
 
 import datetime
 import logging
@@ -53,6 +54,7 @@ class TelegramBot:
         self._application.add_handlers(
             [
                 CommandHandler("santodelgiorno", self._startCommandHandler),
+                CommandHandler("postnow", self._postSaint),
                 CommandHandler("start", self._startCommandHandler),
                 CommandHandler("reset", self._resetCommandHandler),
                 CommandHandler("ping", self._pingCommandHandler),
@@ -142,7 +144,7 @@ class TelegramBot:
         )
         logging.error(f"Traceback: {''.join(tb_list)}")
 
-    async def _postSaint(self, _: CallbackContext) -> None:
+    async def _postSaint(self, **_: Any) -> None:
         logging.info("Posting saint")
         saint = self._factory.generateSaint()
         image_path = saint.image_path
