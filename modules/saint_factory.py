@@ -157,6 +157,27 @@ class SaintFactory:
         self._downloadImage(url, self._AIimageFilename)
         return self._AIimageFilename
 
+    def _selectFont(self) -> str:
+        """
+        Randomly select a font from the font folder.
+
+        Returns:
+            str: Path to the font.
+        """
+        logging.info(f"Selecting font from {self._settings['fonts_folder']}")
+        # list all the fonts in the folder
+        font_files = [
+            os.path.join(self._settings["fonts_folder"], f)
+            for f in os.listdir(self._settings["fonts_folder"])
+            if os.path.isfile(os.path.join(self._settings["fonts_folder"], f))
+            and f.endswith(".ttf")
+        ]
+
+        # select a random font
+        selected_font = random.choice(font_files)
+        logging.info(f"Selected font: {selected_font}")
+        return selected_font
+
     def _fitFont(
         self, text: str, font_size: int, font_path: str, max_width: float
     ) -> int:
@@ -237,7 +258,7 @@ class SaintFactory:
         subtext = saint.full_patron_city
 
         # fit the font to the image width
-        font_path = "resources/fonts/AcciaPiano-LightItalic.ttf"
+        font_path = self._selectFont()
         font_line_scl = 0.8
         font_size = self._fitFont(
             text=text,
