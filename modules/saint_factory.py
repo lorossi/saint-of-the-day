@@ -185,23 +185,44 @@ class SaintFactory:
 
         return font_size
 
-    def _generateImage(self, saint: Saint) -> str:
+    def _createPlaceholderImage(self) -> Image:
+        """Create a placeholder image for when the AI is offline."""
+        logging.info("Creating placeholder image")
+        base_img = Image.new("RGB", (512, 512), color=(255, 255, 255))
+        draw = ImageDraw.Draw(base_img)
+
+        # draw a cross
+        draw.line((0, 0) + base_img.size, fill=(0, 0, 0), width=5)
+        draw.line((0, base_img.height, base_img.width, 0), fill=(0, 0, 0), width=5)
+        # draw rectangle
+        draw.rectangle(
+            (0, 0, base_img.width, base_img.height), outline=(0, 0, 0), width=5
+        )
+
+        # return the image
+        return base_img
+
+    def _generateImage(self, saint: Saint, offline: bool = False) -> str:
         """Generate the image of a saint.
 
         Args:
             saint (Saint): Saint to generate the image for.
+            offline (bool, optional): If True, the AI won't be used \
+                and a placeholder image will be used instead. \
+                Defaults to False.
 
         Returns:
             str: Path to the image.
         """
         logging.info("Generating image")
 
-        # if source image doesn't exist, download it
-        if not os.path.isfile(self._AIimageFilename):
+        if offline:
+            base_img = self._createPlaceholderImage()
+        elif not os.path.isfile(self._AIimageFilename):
+            # if source image doesn't exist, download it
             self._downloadAIImage(saint)
+            base_img = Image.open(self._AIimageFilename)
 
-        # open source image
-        base_img = Image.open(self._AIimageFilename)
         border_x = 32
         border_y = 192
 
@@ -278,15 +299,27 @@ class SaintFactory:
         out_img.save(filename)
         logging.info(f"Image saved to {filename}")
 
-    def generateSaint(self) -> Saint:
+    def generateSaint(
+        self, offline: bool = False, force_generation: bool = False
+    ) -> Saint:
         """Generate a saint.
+
+        If the saint is already generated, it will be loaded from file.
+
+        Args:
+            offline (bool, optional): If True, the AI won't be used \
+                and a placeholder image will be used instead. \
+                Defaults to False.
+            force_generation (bool, optional): If True, the saint will be \
+                generated even if it already exists. \
+                Defaults to False.
 
         Returns:
             Saint
         """
         logging.info("Generating saint")
         # if the saint is already generated, load it from file
-        if os.path.isfile(self._outSaintFilename):
+        if os.path.isfile(self._outSaintFilename) and not force_generation:
             logging.info("Loading saint from file")
             return Saint.fromTOML(self._outSaintFilename)
 
@@ -345,7 +378,7 @@ class SaintFactory:
         )
 
         logging.info("Generating image")
-        self._generateImage(saint)
+        self._generateImage(saint, offline=offline)
         # associate the image to the saint
         saint.image_path = self._outImageFilename
 
