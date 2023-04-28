@@ -249,7 +249,13 @@ class SaintFactory:
 
         # create output image
         out_size = (base_img.width + border_x * 2, base_img.height + border_y)
-        out_img = Image.new("RGBA", out_size, color=(249, 251, 255, 255))
+        img_background_color = (
+            random.randint(235, 255),
+            random.randint(235, 255),
+            random.randint(235, 255),
+            255,
+        )
+        out_img = Image.new("RGBA", out_size, color=img_background_color)
         out_img.paste(base_img, (border_x, border_x))
 
         # initiate the drawing process
