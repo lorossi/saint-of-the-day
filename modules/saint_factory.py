@@ -239,12 +239,11 @@ class SaintFactory:
 
         if offline:
             base_img = self._createPlaceholderImage()
-        elif not os.path.isfile(self._AIimageFilename):
-            # if source image doesn't exist, download it
-            self._downloadAIImage(saint)
-            base_img = Image.open(self._AIimageFilename)
         else:
-            base_img = self._AIimageFilename
+            if not os.path.isfile(self._AIimageFilename):
+                # if source image doesn't exist, download it
+                self._downloadAIImage(saint)
+            base_img = Image.open(self._AIimageFilename)
 
         border_x = 32
         border_y = 192
