@@ -6,7 +6,10 @@ import os
 
 import toml
 from instagrapi import Client
+from instagrapi.mixins.challenge import ChallengeChoice
 from PIL import Image
+
+from modules.email_client import EmailClient
 
 
 class Instagram:
@@ -20,6 +23,7 @@ class Instagram:
         """
         logging.info("Initializing Instagram")
         self._settings = self._loadSettings(path)
+        self._email_client = EmailClient()
         self._createTempFolder()
 
     def _createTempFolder(self) -> None:
@@ -43,10 +47,15 @@ class Instagram:
         with open(path, "r") as f:
             return toml.load(f)[self.__class__.__name__]
 
+    def _challengeCodeHandler(self, _: ChallengeChoice) -> str:
+        self._email_client.fetchRelevant()
+        return self._email_client.security_code
+
     def login(self) -> None:
         """Login to Instagram."""
         logging.info("Logging in to Instagram")
         self._client = Client()
+        self._client.challenge_code_handler = self._challengeCodeHandler
         self._client.login(self._settings["username"], self._settings["password"])
         logging.info(
             f"Logged in to Instagram with username {self._settings['username']}"
