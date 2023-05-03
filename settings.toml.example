@@ -12,13 +12,19 @@ image_folder = "out/images/"
 toml_folder = "out/toml/"
 
 [SaintCreator]
-generate_time = "05:00"
+generate_time = ""
 
 [Instagram]
 username = ""
 password = ""
-temp_folder = "out/temp"
+temp_folder = ""
 
 [InstagramPoster]
-post_time = "08:00"
+post_time = ""
 max_tries = 0
+
+[EmailClient]
+imap_server = ""
+sender = ""
+username = ""
+password = ""
