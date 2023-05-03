@@ -3,13 +3,14 @@ from __future__ import annotations
 
 import logging
 import os
+from time import sleep
 
 import toml
 from instagrapi import Client
 from instagrapi.mixins.challenge import ChallengeChoice
 from PIL import Image
 
-from modules.email_client import EmailClient
+from modules.email_client import EmailClient, EmailClientException
 
 
 class Instagram:
@@ -48,8 +49,20 @@ class Instagram:
             return toml.load(f)[self.__class__.__name__]
 
     def _challengeCodeHandler(self, _: ChallengeChoice) -> str:
-        self._email_client.fetchRelevant()
-        return self._email_client.security_code
+        logging.info("Challenge code required.")
+        tries = 0
+        max_tries = 20
+        sleep_time = 15
+        while True:
+            try:
+                self._email_client.fetchRelevant()
+                return self._email_client.security_code
+            except EmailClientException:
+                logging.info(
+                    f"No relevant email found. Retrying in {sleep_time} seconds. "
+                    f"Attempt {tries}/{max_tries}"
+                )
+                sleep(sleep_time)
 
     def login(self) -> None:
         """Login to Instagram."""

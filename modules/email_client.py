@@ -12,6 +12,12 @@ from email.policy import default
 import toml
 
 
+class EmailClientException(Exception):
+    """Base class for exceptions in this module."""
+
+    pass
+
+
 class EmailClient:
     """Class handling the logic of the email client."""
 
@@ -134,7 +140,7 @@ class EmailClient:
         """Get the security code from the email."""
         if not self._security_code:
             if not self._extractSecurityCode():
-                raise Exception("No security code found")
+                raise EmailClientException("No security code found")
 
         return self._security_code
 
