@@ -7,3 +7,4 @@ schedule==1.2.0
 python-telegram-bot[job-queue]==20.2
 typing_extensions==4.5.0
 openai==0.27.5
+toml==0.10.2
