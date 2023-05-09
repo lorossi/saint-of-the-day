@@ -4,6 +4,7 @@ from __future__ import annotations
 import logging
 import os
 from time import sleep
+from typing import Any
 
 import toml
 from instagrapi import Client
@@ -48,11 +49,11 @@ class Instagram:
         with open(path, "r") as f:
             return toml.load(f)[self.__class__.__name__]
 
-    def _challengeCodeHandler(self, _: ChallengeChoice) -> str:
+    def _challengeCodeHandler(self, _: ChallengeChoice, *__: Any) -> str:
         logging.info("Challenge code required.")
         tries = 0
-        max_tries = 20
-        sleep_time = 15
+        max_tries = 4
+        sleep_time = 5
         while True:
             try:
                 self._email_client.fetchRelevant()
@@ -60,8 +61,11 @@ class Instagram:
             except EmailClientException:
                 logging.info(
                     f"No relevant email found. Retrying in {sleep_time} seconds. "
-                    f"Attempt {tries}/{max_tries}"
+                    f"Attempt {tries+1}/{max_tries}"
                 )
+                tries += 1
+                if tries >= max_tries:
+                    raise Exception("Too many attempts")
                 sleep(sleep_time)
 
     def login(self) -> None:
