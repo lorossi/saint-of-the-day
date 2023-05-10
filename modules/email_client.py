@@ -113,19 +113,25 @@ class EmailClient:
         else:
             return email.get_payload(None, True).decode("utf-8")
 
-    def _extractSecurityCode(self) -> bool:
+    def _extractSecurityCode(self) -> str:
         """Extract the security code from the emails.
 
         Returns:
-            bool: True if the security code was found, False otherwise.
+            str: Security code. If multiple codes are found, \
+                the one found in the most recent email is returned.
         """
+        last_date = None
+        last_code = None
+
         for email in self._emails:
             content = self._extractEmailContent(email)
-            if m := re.findall(r"^\d{6}", content, flags=re.MULTILINE):
-                self._security_code = m[0]
-                return True
+            if m := re.findall(r">(\d{6})<", content, flags=re.MULTILINE):
+                date = datetime.strptime(email["Date"][:-6], "%a, %d %b %Y %H:%M:%S")
+                if last_date is None or date > last_date:
+                    last_date = date
+                    last_code = m[0]
 
-        return False
+        return last_code
 
     @property
     def _today_query(self) -> str:
@@ -136,13 +142,9 @@ class EmailClient:
         return f"FROM {self._settings['sender']}"
 
     @property
-    def security_code(self) -> str:
+    def security_code(self) -> str | None:
         """Get the security code from the email."""
-        if not self._security_code:
-            if not self._extractSecurityCode():
-                raise EmailClientException("No security code found")
-
-        return self._security_code
+        return self._extractSecurityCode()
 
 
 if __name__ == "__main__":
