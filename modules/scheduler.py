@@ -68,7 +68,7 @@ class Scheduler:
         schedule_time_str = schedule_time.strftime("%H:%M")
         schedule.every().day.at(schedule_time_str).do(function)
 
-    def tryFunction(self, function: callable, retry_delay: int = 10) -> bool:
+    def tryFunction(self, function: callable, retry_delay: int = 30) -> bool:
         """Try to run a function."""
         tries = 0
         max_tries = self._settings["max_tries"]
