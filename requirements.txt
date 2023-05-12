@@ -1,5 +1,5 @@
 beautifulsoup4==4.12.2
-instagrapi==1.17.6
+instagrapi==1.17.8
 Pillow==9.5.0
 pytz==2022.2.1
 requests==2.28.2
