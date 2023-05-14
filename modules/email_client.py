@@ -83,6 +83,7 @@ class EmailClient:
             return 0
 
         logging.info("Loading emails from today")
+        logging.info(f"Query: ({self._today_query} {self._sender_query})")
         _, data = self._client.search(
             None, f"({self._today_query} {self._sender_query})"
         )
