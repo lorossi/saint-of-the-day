@@ -7,6 +7,7 @@ from time import sleep
 from typing import Any
 
 import toml
+import ujson
 from instagrapi import Client
 from instagrapi.mixins.challenge import ChallengeChoice
 from PIL import Image
@@ -49,6 +50,18 @@ class Instagram:
         with open(path, "r") as f:
             return toml.load(f)[self.__class__.__name__]
 
+    def _tryLoadInstagramSettings(self) -> None:
+        if not os.path.exists(self._settings["instagram_settings_path"]):
+            return False
+
+        try:
+            with open(self._settings["instagram_settings_path"], "r") as f:
+                self._client.settings = ujson.load(f)
+            return True
+        except Exception as e:
+            logging.error(f"Error loading Instagram settings: {e}")
+            return False
+
     def _challengeCodeHandler(self, _: ChallengeChoice, *__: Any) -> str:
         logging.info("Challenge code required.")
         tries = 0
@@ -68,16 +81,6 @@ class Instagram:
                     raise Exception("Too many attempts")
                 sleep(sleep_time)
 
-    def login(self) -> None:
-        """Login to Instagram."""
-        logging.info("Logging in to Instagram")
-        self._client = Client()
-        self._client.challenge_code_handler = self._challengeCodeHandler
-        self._client.login(self._settings["username"], self._settings["password"])
-        logging.info(
-            f"Logged in to Instagram with username {self._settings['username']}"
-        )
-
     def _convertToJPEG(self, image_path: str, destination: str) -> str:
         """Convert an image to JPEG.
 
@@ -95,6 +98,36 @@ class Instagram:
         image.save(jpeg_path, "JPEG")
         logging.info(f"Image converted to {jpeg_path}")
         return jpeg_path
+
+    def login(self, use_proxy: bool = False) -> None:
+        """Login to Instagram."""
+        logging.info("Logging in to Instagram")
+        self._client = Client()
+        self._client.challenge_code_handler = self._challengeCodeHandler
+
+        if use_proxy:
+            self._client.set_proxy(self.proxy)
+
+        settings_exist = self._tryLoadInstagramSettings()
+        if settings_exist:
+            logging.info("Instagram settings loaded from file")
+            self._client.load_settings(self._settings["instagram_settings_path"])
+        else:
+            logging.info("Instagram settings not found. Creating new ones")
+            self._client.set_locale("it_IT")
+            self._client.set_country("IT")
+            self._client.set_country_code(39)
+            self._client.set_timezone_offset(7200)
+
+        self._client.login(self._settings["username"], self._settings["password"])
+
+        if not settings_exist:
+            logging.info("Saving Instagram settings to file")
+            self._client.dump_settings(self._settings["instagram_settings_path"])
+
+        logging.info(
+            f"Logged in to Instagram with username {self._settings['username']}"
+        )
 
     def uploadImage(self, image_path: str, image_caption: str) -> None:
         """Upload an image to Instagram.
@@ -116,3 +149,12 @@ class Instagram:
         if delete_after:
             logging.info("Cleaning temporary folder")
             self._cleanTempFolder()
+
+    @property
+    def proxy(self) -> str:
+        url = self._settings["proxy_host"]
+        port = self._settings["proxy_port"]
+        username = self._settings["proxy_username"]
+        password = self._settings["proxy_password"]
+
+        return f"http://{username}:{password}@{url}:{port}"
