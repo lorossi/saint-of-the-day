@@ -22,6 +22,7 @@ temp_folder = ""
 [InstagramPoster]
 post_time = ""
 max_tries = 0
+retry_delay = 0
 
 [EmailClient]
 imap_server = ""

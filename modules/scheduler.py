@@ -68,16 +68,18 @@ class Scheduler:
         schedule_time_str = schedule_time.strftime("%H:%M")
         schedule.every().day.at(schedule_time_str).do(function)
 
-    def tryFunction(self, function: callable, retry_delay: int = 30) -> bool:
+    def tryFunction(self, f: callable) -> bool:
         """Try to run a function."""
         tries = 0
         max_tries = self._settings["max_tries"]
+        retry_delay = self._settings["retry_delay"]
         while tries < max_tries:
             try:
-                function()
+                f()
                 return True
             except Exception as e:
-                logging.error(f"Error while running function: {e}")
+                logging.error(f"Error while running function: {f.__name__}")
+                logging.error(f"Error raised: {e}")
                 tries += 1
                 logging.info(
                     f"Trying again in {retry_delay} second ({tries}/{max_tries})"
