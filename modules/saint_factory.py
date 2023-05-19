@@ -17,6 +17,8 @@ from .saint import Gender, Saint
 class SaintFactory:
     """Class handling the logic to generate images of saints."""
 
+    _settings: dict[str, str]
+
     def __init__(self) -> SaintFactory:
         """Initialize the saint factory.
 

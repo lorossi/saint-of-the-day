@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import logging
+from datetime import datetime
 
 from modules.instagram import Instagram
 from modules.saint_factory import SaintFactory
@@ -11,6 +12,10 @@ from .scheduler import Scheduler
 
 class InstagramPoster(Scheduler):
     """Class handling the logic of the instagram poster."""
+
+    _factory: SaintFactory
+    _instagram: Instagram
+    _post_time: datetime
 
     def __init__(self) -> InstagramPoster:
         """Initialize the poster."""

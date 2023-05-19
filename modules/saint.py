@@ -17,6 +17,17 @@ class Gender(Enum):
 class Saint:
     """Class containing a saint."""
 
+    _name: str
+    _gender: Gender
+    _protector_of: list[str]
+    _patron_city: str
+    _born: int
+    _died: int
+    _birthplace: str
+    _deathplace: str
+    _image_path: str = None
+    _protector_of_english: list[str] = None
+
     def __init__(
         self,
         name: str,
