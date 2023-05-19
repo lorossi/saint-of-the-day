@@ -129,6 +129,12 @@ class Instagram:
             f"Logged in to Instagram with username {self._settings['username']}"
         )
 
+    def logout(self) -> None:
+        """Logout from Instagram."""
+        logging.info("Logging out from Instagram")
+        self._client.logout()
+        logging.info("Logged out from Instagram")
+
     def uploadImage(self, image_path: str, image_caption: str) -> None:
         """Upload an image to Instagram.
 

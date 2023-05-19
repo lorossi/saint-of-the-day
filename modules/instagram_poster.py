@@ -33,6 +33,8 @@ class InstagramPoster(Scheduler):
         if not self.tryFunction(self._uploadImage):
             return
 
+        self._instagram.logout()
+
         logging.info("Upload done")
 
     def _uploadImage(self) -> None:
