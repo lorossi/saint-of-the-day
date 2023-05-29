@@ -53,7 +53,7 @@ class SaintFactory:
             return toml.load(f)["SaintFactory"]
 
     def _createFolderStructure(self) -> None:
-        """Create folder structure. \
+        """Create folder structure.
         The needed folders are in the settings.toml file."""
         logging.info("Creating folder structure")
         os.makedirs(self._settings["openai_folder"], exist_ok=True)
@@ -212,8 +212,8 @@ class SaintFactory:
 
         Args:
             saint (Saint): Saint to generate the image for.
-            offline (bool, optional): If True, the AI won't be used \
-                and a placeholder image will be used instead. \
+            offline (bool, optional): If True, the AI won't be used
+                and a placeholder image will be used instead.
                 Defaults to False.
 
         Returns:
@@ -319,11 +319,11 @@ class SaintFactory:
         If the saint is already generated, it will be loaded from file.
 
         Args:
-            offline (bool, optional): If True, the AI won't be used \
-                and a placeholder image will be used instead. \
+            offline (bool, optional): If True, the AI won't be used
+                and a placeholder image will be used instead.
                 Defaults to False.
-            force_generation (bool, optional): If True, the saint will be \
-                generated even if it already exists. \
+            force_generation (bool, optional): If True, the saint will be
+                generated even if it already exists.
                 Defaults to False.
 
         Returns:

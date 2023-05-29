@@ -1,6 +1,6 @@
 """This module contains the class handling the logic of the scheduler.
 
-The scheduler is a class inherited by other classes that need to schedule \
+The scheduler is a class inherited by other classes that need to schedule
 a task once a day. It uses the schedule library to schedule the task and \
 the time is loaded from a settings file, in format HH:MM.
 """

@@ -53,7 +53,7 @@ class Saint:
             birthplace (str): Birthplace of the saint.
             deathplace (str): Deathplace of the saint.
             image_path (str, optional): Path of the saint image. Defaults to None.
-            protector_of_english (list[str], optional): English translation \
+            protector_of_english (list[str], optional): English translation
                  of the things the saint protects. Defaults to None.
 
         Returns:

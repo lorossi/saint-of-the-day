@@ -118,7 +118,7 @@ class EmailClient:
         """Extract the security code from the emails.
 
         Returns:
-            str: Security code. If multiple codes are found, \
+            str: Security code. If multiple codes are found,
                 the one found in the most recent email is returned.
         """
         last_date = None
