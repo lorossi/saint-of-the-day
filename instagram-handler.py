@@ -5,7 +5,7 @@ from modules.instagram_poster import InstagramPoster
 
 
 def main() -> None:
-    """Main function."""
+    """Script entry point."""
     logging.info("Starting instagram poster")
     poster = InstagramPoster()
     poster.start()
@@ -14,7 +14,7 @@ def main() -> None:
 if __name__ == "__main__":
     logging.basicConfig(
         level=logging.INFO,
-        filename= __file__.replace(".py", ".log"),
+        filename=__file__.replace(".py", ".log"),
         filemode="w",
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     )

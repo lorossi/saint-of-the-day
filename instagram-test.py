@@ -1,10 +1,12 @@
+"""Simple login test for the instagram client."""
 import logging
+
 
 from modules.instagram import Instagram
 
 
 def main() -> None:
-    """Main function."""
+    """Script entry point."""
     instagram = Instagram()
     instagram.login()
 

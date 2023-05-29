@@ -1,8 +1,8 @@
 """
 Module containing the main function for generating a Saint in a quick way.
 
-Run with "online" argument to run in online mode. \
-Otherwise, only a placeholder image will be generated instead of one \
+Run with "online" argument to run in online mode.
+Otherwise, only a placeholder image will be generated instead of one
 made by the AI.
 """
 from __future__ import annotations
