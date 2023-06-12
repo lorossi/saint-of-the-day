@@ -124,6 +124,9 @@ The bot is reachable at [@santinoquotidiano_bot](https://t.me/santi_del_giorno_b
 Due to reasons that I still don't fully understand, the bot sometimes "misses" some messages, and I have to post manually.
 This is why I introduced a manual command, `/postnow`, that forces the bot to post the latest Saint immediately.
 
+**Update**: this issue seems to have been solved by using the `misfire_grace_time` parameter of the `job_queue.run_repeating` method.
+I still don't know what causes this delay, but at least now it should be patched (posts will be delayed by at most 5 minutes).
+
 ### Scheduler
 
 Since I had to use the same scheduler for both the Instagram posting and the Saint generation, I decided to create a generic scheduler class: `src/scheduler.py`.
@@ -157,7 +160,7 @@ The main problems to solve are:
 
 - The script is unable to log in to Instagram
 - The script is unable to post on Instagram
-- Sometimes, the Telegram bot misses some messages
+- ~Sometimes, the Telegram bot misses some messages~ *(possibly solved)*
 
 After these issues have been solved, I might as well find a way to make the generated images more appealing, by adding more variety to the backgrounds and the way text is displayed.
 
