@@ -4,3 +4,4 @@ settings.toml
 out/
 *.log
 *.ttf
+instagram_settings.json
