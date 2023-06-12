@@ -13,8 +13,11 @@ def main() -> None:
 if __name__ == "__main__":
     logging.basicConfig(
         level=logging.INFO,
-        filename= __file__.replace(".py", ".log"),
+        filename=__file__.replace(".py", ".log"),
         filemode="w",
-        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+        format=(
+            "%(asctime)s - %(levelname)s - %(module)s - %(funcName)s "
+            "(%(lineno)d) - %(message)s"
+        ),
     )
     main()
