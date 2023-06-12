@@ -153,10 +153,15 @@ The main folder contains a few additional scripts that I used to create the proj
 
 ## What's next?
 
-The main problems to solve are the Instagram login and posting, and the Telegram bot missing some messages.
-After this, I might as well find a way to make the generated images more appealing, by adding more variety to the backgrounds and the way text is displayed.
+The main problems to solve are:
 
-Other than these issues, I don't have any other plans for the project: I feel it's complete as it is.
+- The script is unable to log in to Instagram
+- The script is unable to post on Instagram
+- Sometimes, the Telegram bot misses some messages
+
+After these issues have been solved, I might as well find a way to make the generated images more appealing, by adding more variety to the backgrounds and the way text is displayed.
+
+Other than this, I don't have any other plans for the project: I feel it's complete as it is.
 
 ## License
 
