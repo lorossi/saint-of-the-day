@@ -53,8 +53,11 @@ class SaintFactory:
             return toml.load(f)["SaintFactory"]
 
     def _createFolderStructure(self) -> None:
-        """Create folder structure.
-        The needed folders are in the settings.toml file."""
+        """
+        Create folder structure.
+
+        The needed folders are in the settings.toml file.
+        """
         logging.info("Creating folder structure")
         os.makedirs(self._settings["openai_folder"], exist_ok=True)
         os.makedirs(self._settings["image_folder"], exist_ok=True)
