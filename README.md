@@ -10,13 +10,13 @@ A new Saint is created every day at 8.00 AM (CET)!
 
 ![San Urbano](img/resized-20230131.png)
 ![San Gisello](img/resized-20230512.png)
+
 ![San Eaco](img/resized-20230524.png)
-
 ![Santa Dione](img/resized-20230528.png)
-![San Nicomedo](img/resized-20230531.png)
-![San Aminto](img/resized-20230601.png)
 
+![San Aminto](img/resized-20230601.png)
 ![San Evangelisto](img/resized-20230605.png)
+
 ![Santa Alessina](img/resized-20230607.png)
 ![San Finzio](img/resized-20230612.png)
 
