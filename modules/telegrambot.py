@@ -43,6 +43,7 @@ class TelegramBot:
             self._postSaint,
             time=self._post_time,
             days=(0, 1, 2, 3, 4, 5, 6),
+            misfire_grace_time=300,  # allow some slack in the job execution time
         )
         self._job_queue.run_once(
             self._botStarted,
