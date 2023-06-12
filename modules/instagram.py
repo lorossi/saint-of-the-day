@@ -9,6 +9,7 @@ from typing import Any
 import toml
 import ujson
 from instagrapi import Client
+from instagrapi.exceptions import ClientLoginRequired, LoginRequired
 from instagrapi.mixins.challenge import ChallengeChoice
 from PIL import Image
 
@@ -149,8 +150,20 @@ class Instagram:
             delete_after = True
             image_path = self._convertToJPEG(image_path, self._settings["temp_folder"])
 
-        self._client.photo_upload(image_path, image_caption)
-        logging.info(f"Image {image_path} uploaded to Instagram")
+        tried = False
+        while True:
+            try:
+                self._client.photo_upload(image_path, image_caption)
+                logging.info(f"Image {image_path} uploaded to Instagram")
+                break
+            except (ClientLoginRequired, LoginRequired) as e:
+                if tried:
+                    logging.error("Login failed. Aborting")
+                    raise e
+
+                logging.info("Login required. Logging in again")
+                self.login()
+                tried = True
 
         if delete_after:
             logging.info("Cleaning temporary folder")
@@ -158,9 +171,13 @@ class Instagram:
 
     @property
     def proxy(self) -> str:
+        """Return the proxy URL representation."""
         url = self._settings["proxy_host"]
         port = self._settings["proxy_port"]
         username = self._settings["proxy_username"]
         password = self._settings["proxy_password"]
+
+        if not username or not password:
+            return f"http://{url}:{port}"
 
         return f"http://{username}:{password}@{url}:{port}"
