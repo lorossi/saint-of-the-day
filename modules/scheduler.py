@@ -80,6 +80,7 @@ class Scheduler:
             except Exception as e:
                 logging.error(f"Error while running function: {f.__name__}")
                 logging.error(f"Error raised: {e}")
+                logging.error(f"Error type: {type(e)}")
                 tries += 1
                 logging.info(
                     f"Trying again in {retry_delay} second ({tries}/{max_tries})"
