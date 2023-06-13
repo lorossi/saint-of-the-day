@@ -130,6 +130,8 @@ class Instagram:
             f"Logged in to Instagram with username {self._settings['username']}"
         )
 
+        return True
+
     def logout(self) -> None:
         """Logout from Instagram."""
         logging.info("Logging out from Instagram")

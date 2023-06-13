@@ -27,6 +27,7 @@ class InstagramQuickPost:
         """Publish a post."""
         logging.info("Starting instagram quick poster")
         if not self._instagram.login():
+            logging.error("Login failed")
             return
 
         logging.info("Logged in")
