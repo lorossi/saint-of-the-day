@@ -9,7 +9,7 @@ from typing import Any
 import toml
 import ujson
 from instagrapi import Client
-from instagrapi.exceptions import PhotoNotUpload
+from instagrapi.exceptions import LoginRequired
 from instagrapi.mixins.challenge import ChallengeChoice
 from PIL import Image
 
@@ -51,7 +51,7 @@ class Instagram:
         with open(path, "r") as f:
             return toml.load(f)[self.__class__.__name__]
 
-    def _tryLoadInstagramSettings(self) -> None:
+    def _tryLoadInstagramSettings(self) -> bool:
         if not os.path.exists(self._settings["instagram_settings_path"]):
             return False
 
@@ -62,6 +62,13 @@ class Instagram:
         except Exception as e:
             logging.error(f"Error loading Instagram settings: {e}")
             return False
+
+    def _deleteInstagramSettings(self) -> bool:
+        if not os.path.exists(self._settings["instagram_settings_path"]):
+            return False
+
+        os.remove(self._settings["instagram_settings_path"])
+        return True
 
     def _challengeCodeHandler(self, _: ChallengeChoice, *__: Any) -> str:
         logging.info("Challenge code required.")
@@ -120,15 +127,25 @@ class Instagram:
             self._client.set_country_code(39)
             self._client.set_timezone_offset(7200)
 
+        logging.info("Logging in to Instagram API")
         self._client.login(self._settings["username"], self._settings["password"])
 
-        if not settings_exist:
-            logging.info("Saving Instagram settings to file")
-            self._client.dump_settings(self._settings["instagram_settings_path"])
+        try:
+            account_info = self._client.account_info()
+            logging.info(f"Logged in to Instagram with account info: {account_info}")
+        except LoginRequired:
+            logging.warning("login required, using clean session")
+            # log out from the current session
+            self.logout()
+            # delete the previous settings
+            self._deleteInstagramSettings()
+            # log in again
+            self.login()
 
-        logging.info(
-            f"Logged in to Instagram with username {self._settings['username']}"
-        )
+        logging.info("Saving Instagram settings to file")
+        self._client.dump_settings(self._settings["instagram_settings_path"])
+
+        logging.info("Log in procedure completed")
 
         return True
 
@@ -152,27 +169,8 @@ class Instagram:
             delete_after = True
             image_path = self._convertToJPEG(image_path, self._settings["temp_folder"])
 
-        tried = False
-        while True:
-            try:
-                self._client.photo_upload(image_path, image_caption)
-                logging.info(f"Image {image_path} uploaded to Instagram")
-                break
-            except PhotoNotUpload as e:
-                if tried:
-                    logging.error(f"Error uploading image: {e}")
-                    raise e
-
-                if not hasattr(e, "message"):
-                    raise e
-
-                if "login_required" not in e.message:
-                    logging.error(f"Error uploading image: {e}")
-                    raise e
-
-                logging.info("Login required. Logging in again")
-                self.login()
-                tried = True
+        self._client.photo_upload(image_path, image_caption)
+        logging.info(f"Image {image_path} uploaded to Instagram")
 
         if delete_after:
             logging.info("Cleaning temporary folder")
