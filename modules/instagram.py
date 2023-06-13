@@ -9,7 +9,7 @@ from typing import Any
 import toml
 import ujson
 from instagrapi import Client
-from instagrapi.exceptions import LoginRequired, ClientForbiddenError
+from instagrapi.exceptions import ClientForbiddenError, LoginRequired
 from instagrapi.mixins.challenge import ChallengeChoice
 from PIL import Image
 
@@ -19,6 +19,10 @@ from modules.email_client import EmailClient, EmailClientException
 class Instagram:
     """Class handling the logic to post images to Instagram."""
 
+    _settings: dict[str, Any]
+    _client: Client
+    _email_client: EmailClient
+
     def __init__(self, path="settings.toml") -> Instagram:
         """Initialize the bot.
 
@@ -27,7 +31,6 @@ class Instagram:
         """
         logging.info("Initializing Instagram")
         self._settings = self._loadSettings(path)
-        self._email_client = EmailClient()
         self._createTempFolder()
 
     def _createTempFolder(self) -> None:
@@ -72,9 +75,12 @@ class Instagram:
 
     def _challengeCodeHandler(self, _: ChallengeChoice, *__: Any) -> str:
         logging.info("Challenge code required.")
+        self._email_client = EmailClient()
+
         tries = 0
         max_tries = 4
         sleep_time = 5
+
         while True:
             try:
                 self._email_client.fetchRelevant()
