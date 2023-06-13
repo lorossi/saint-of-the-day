@@ -9,7 +9,7 @@ from typing import Any
 import toml
 import ujson
 from instagrapi import Client
-from instagrapi.exceptions import LoginRequired
+from instagrapi.exceptions import LoginRequired, ClientForbiddenError
 from instagrapi.mixins.challenge import ChallengeChoice
 from PIL import Image
 
@@ -107,7 +107,27 @@ class Instagram:
         logging.info(f"Image converted to {jpeg_path}")
         return jpeg_path
 
-    def _clientLogin(self, settings_exist: bool) -> None:
+    def login(self, use_proxy: bool = False, try_again: bool = True) -> bool:
+        """Login to Instagram.
+
+        Args:
+            use_proxy (bool, optional): Whether to use the proxy loaded from settings.
+                Defaults to False.
+            try_again (bool, optional): If the first login attempt fails, whether to try
+                again by first logging out and deleting the settings file. Defaults to
+                True.
+
+        Returns:
+            bool: Whether the login was successful.
+        """
+        logging.info("Logging in to Instagram")
+        self._client = Client()
+        self._client.challenge_code_handler = self._challengeCodeHandler
+
+        if use_proxy:
+            self._client.set_proxy(self.proxy)
+
+        settings_exist = self._tryLoadInstagramSettings()
         if settings_exist:
             logging.info("Instagram settings loaded from file")
             self._client.load_settings(self._settings["instagram_settings_path"])
@@ -121,30 +141,20 @@ class Instagram:
         logging.info("Logging in to Instagram API")
         self._client.login(self._settings["username"], self._settings["password"])
 
-    def login(self, use_proxy: bool = False) -> None:
-        """Login to Instagram."""
-        logging.info("Logging in to Instagram")
-        self._client = Client()
-        self._client.challenge_code_handler = self._challengeCodeHandler
-
-        if use_proxy:
-            self._client.set_proxy(self.proxy)
-
-        logging.info("Logging in to Instagram API")
-        settings_exist = self._tryLoadInstagramSettings()
-        self._clientLogin(settings_exist)
-
         try:
             account_info = self._client.account_info()
             logging.info(f"Logged in to Instagram with account info: {account_info}")
-        except LoginRequired:
+        except (LoginRequired, ClientForbiddenError) as e:
+            if not try_again:
+                raise e
+
             logging.warning("login required, using clean session")
             # log out from the current session
             self.logout()
             # delete the previous settings
             self._deleteInstagramSettings()
             # log in again
-            self._clientLogin(False)
+            self.login(False)
 
         logging.info("Saving Instagram settings to file")
         self._client.dump_settings(self._settings["instagram_settings_path"])
