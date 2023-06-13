@@ -111,6 +111,8 @@ Some issues that I encountered are:
 This is still a big work in progress, and I hope to be able to solve these issues soon.
 Meanwhile, you can follow the [Telegram Channel](https://t.me/santinoquotidiano) to keep up with the latest posts.
 
+**Update**: this issue might be fixed. The script needed to logout, delete the settings and try again logging in for this to work.
+
 ### 3. Telegram Posting
 
 Telegram, unlike Instagram, is very developer-friendly.
@@ -158,8 +160,8 @@ The main folder contains a few additional scripts that I used to create the proj
 
 The main problems to solve are:
 
-- The script is unable to log in to Instagram
-- The script is unable to post on Instagram
+- ~The script is unable to log in to Instagram~ *(possibly solved)*
+- ~The script is unable to post on Instagram~ *(possibly solved)*
 - ~Sometimes, the Telegram bot misses some messages~ *(possibly solved)*
 
 After these issues have been solved, I might as well find a way to make the generated images more appealing, by adding more variety to the backgrounds and the way text is displayed.
