@@ -9,7 +9,7 @@ from typing import Any
 import toml
 import ujson
 from instagrapi import Client
-from instagrapi.exceptions import ClientLoginRequired, LoginRequired
+from instagrapi.exceptions import PhotoNotUpload
 from instagrapi.mixins.challenge import ChallengeChoice
 from PIL import Image
 
@@ -156,9 +156,16 @@ class Instagram:
                 self._client.photo_upload(image_path, image_caption)
                 logging.info(f"Image {image_path} uploaded to Instagram")
                 break
-            except (ClientLoginRequired, LoginRequired) as e:
+            except PhotoNotUpload as e:
                 if tried:
-                    logging.error("Login failed. Aborting")
+                    logging.error(f"Error uploading image: {e}")
+                    raise e
+
+                if not hasattr(e, "message"):
+                    raise e
+
+                if "login_required" not in e.message:
+                    logging.error(f"Error uploading image: {e}")
                     raise e
 
                 logging.info("Login required. Logging in again")
