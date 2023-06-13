@@ -7,6 +7,7 @@ the time is loaded from a settings file, in format HH:MM.
 from __future__ import annotations
 
 import logging
+from typing import Callable
 from datetime import datetime
 from time import sleep
 
@@ -57,18 +58,18 @@ class Scheduler:
             tzinfo=self._timezone
         )
 
-    def _schedule(self, key: str, function: callable) -> None:
+    def _schedule(self, key: str, function: Callable) -> None:
         """Schedule a function to run at a specific time once a day.
 
         Args:
             key (str): key containing the run time in format %H:%M
-            function (callable): function to run
+            function (Callable): function to run
         """
         schedule_time = self.loadScheduleTime(key)
         schedule_time_str = schedule_time.strftime("%H:%M")
         schedule.every().day.at(schedule_time_str).do(function)
 
-    def tryFunction(self, f: callable) -> bool:
+    def tryFunction(self, f: Callable) -> bool:
         """Try to run a function."""
         tries = 0
         max_tries = self._settings["max_tries"]
@@ -90,7 +91,7 @@ class Scheduler:
         logging.error("Max tries reached. Exiting...")
         return False
 
-    def start(self, key: str, function: callable) -> None:
+    def start(self, key: str, function: Callable) -> None:
         """Loop the creator."""
         self._schedule(key, function)
         logging.info(f"Function {function.__name__} scheduled for {self.next_run}")
@@ -109,4 +110,8 @@ class Scheduler:
         Returns:
             str: run time, iso format
         """
-        return schedule.next_run().isoformat()
+        n = schedule.next_run()
+        if n is None:
+            raise ValueError("No next run time found")
+
+        return n.isoformat()

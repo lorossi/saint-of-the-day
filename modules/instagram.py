@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import logging
 import os
+from pathlib import Path
 from time import sleep
 from typing import Any
 
@@ -155,12 +156,9 @@ class Instagram:
                 raise e
 
             logging.warning("login required, using clean session")
-            # log out from the current session
             self.logout()
-            # delete the previous settings
             self._deleteInstagramSettings()
-            # log in again
-            self.login(False)
+            self.login(try_again=False)
 
         logging.info("Saving Instagram settings to file")
         self._client.dump_settings(self._settings["instagram_settings_path"])
@@ -189,7 +187,8 @@ class Instagram:
             delete_after = True
             image_path = self._convertToJPEG(image_path, self._settings["temp_folder"])
 
-        self._client.photo_upload(image_path, image_caption)
+        path = Path(image_path)
+        self._client.photo_upload(path, image_caption)
         logging.info(f"Image {image_path} uploaded to Instagram")
 
         if delete_after:

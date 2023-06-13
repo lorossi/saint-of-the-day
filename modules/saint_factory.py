@@ -193,7 +193,7 @@ class SaintFactory:
 
         return font_size
 
-    def _createPlaceholderImage(self) -> Image:
+    def _createPlaceholderImage(self) -> Image.Image:
         """Create a placeholder image for when the AI is offline."""
         logging.info("Creating placeholder image")
         base_img = Image.new("RGB", (512, 512), color=(255, 255, 255))
@@ -313,6 +313,7 @@ class SaintFactory:
         filename = self._outImageFilename
         out_img.save(filename)
         logging.info(f"Image saved to {filename}")
+        return filename
 
     def generateSaint(
         self, offline: bool = False, force_generation: bool = False
