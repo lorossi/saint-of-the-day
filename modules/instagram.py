@@ -107,16 +107,7 @@ class Instagram:
         logging.info(f"Image converted to {jpeg_path}")
         return jpeg_path
 
-    def login(self, use_proxy: bool = False) -> None:
-        """Login to Instagram."""
-        logging.info("Logging in to Instagram")
-        self._client = Client()
-        self._client.challenge_code_handler = self._challengeCodeHandler
-
-        if use_proxy:
-            self._client.set_proxy(self.proxy)
-
-        settings_exist = self._tryLoadInstagramSettings()
+    def _clientLogin(self, settings_exist: bool) -> None:
         if settings_exist:
             logging.info("Instagram settings loaded from file")
             self._client.load_settings(self._settings["instagram_settings_path"])
@@ -130,6 +121,19 @@ class Instagram:
         logging.info("Logging in to Instagram API")
         self._client.login(self._settings["username"], self._settings["password"])
 
+    def login(self, use_proxy: bool = False) -> None:
+        """Login to Instagram."""
+        logging.info("Logging in to Instagram")
+        self._client = Client()
+        self._client.challenge_code_handler = self._challengeCodeHandler
+
+        if use_proxy:
+            self._client.set_proxy(self.proxy)
+
+        logging.info("Logging in to Instagram API")
+        settings_exist = self._tryLoadInstagramSettings()
+        self._clientLogin(settings_exist)
+
         try:
             account_info = self._client.account_info()
             logging.info(f"Logged in to Instagram with account info: {account_info}")
@@ -140,7 +144,7 @@ class Instagram:
             # delete the previous settings
             self._deleteInstagramSettings()
             # log in again
-            self.login()
+            self._clientLogin(False)
 
         logging.info("Saving Instagram settings to file")
         self._client.dump_settings(self._settings["instagram_settings_path"])
