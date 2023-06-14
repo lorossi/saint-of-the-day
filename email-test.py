@@ -7,9 +7,8 @@ from modules.email_client import EmailClient
 def main():
     """Script entry point."""
     e = EmailClient()
-    found = e.fetchRelevant()
-    logging.info(f"Found {found} relevant emails")
-    logging.info(f"Security code: {e.security_code}")
+    security_code = e.getInstagramSecurityCode()
+    logging.info(f"Security code: {security_code}")
 
 
 if __name__ == "__main__":

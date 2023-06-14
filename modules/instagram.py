@@ -22,7 +22,6 @@ class Instagram:
 
     _settings: dict[str, Any]
     _client: Client
-    _email_client: EmailClient
 
     def __init__(self, path="settings.toml") -> Instagram:
         """Initialize the bot.
@@ -74,9 +73,12 @@ class Instagram:
         os.remove(self._settings["instagram_settings_path"])
         return True
 
+    def _saveInstagramSettings(self) -> bool:
+        self._client.dump_settings(self._settings["instagram_settings_path"])
+
     def _challengeCodeHandler(self, _: ChallengeChoice, *__: Any) -> str:
         logging.info("Challenge code required.")
-        self._email_client = EmailClient()
+        email_client = EmailClient()
 
         tries = 0
         max_tries = 4
@@ -84,8 +86,7 @@ class Instagram:
 
         while True:
             try:
-                self._email_client.fetchRelevant()
-                return self._email_client.security_code
+                return email_client.getInstagramSecurityCode()
             except EmailClientException:
                 logging.info(
                     f"No relevant email found. Retrying in {sleep_time} seconds. "
@@ -151,6 +152,8 @@ class Instagram:
         try:
             account_info = self._client.account_info()
             logging.info(f"Logged in to Instagram with account info: {account_info}")
+            self._saveInstagramSettings()
+            logging.info("Instagram settings saved to file")
         except (LoginRequired, ClientForbiddenError) as e:
             if not try_again:
                 raise e
@@ -159,9 +162,6 @@ class Instagram:
             self.logout()
             self._deleteInstagramSettings()
             self.login(try_again=False)
-
-        logging.info("Saving Instagram settings to file")
-        self._client.dump_settings(self._settings["instagram_settings_path"])
 
         logging.info("Log in procedure completed")
 
