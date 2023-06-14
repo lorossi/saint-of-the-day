@@ -153,9 +153,3 @@ class EmailClient:
     @property
     def _sender_query(self) -> str:
         return f"FROM {self._settings['sender']}"
-
-
-if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
-    email = EmailClient()
-    print(email.getInstagramSecurityCode())
