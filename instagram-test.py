@@ -7,8 +7,11 @@ from modules.instagram import Instagram
 
 def main() -> None:
     """Script entry point."""
+    logging.info("Starting Instagram test")
     instagram = Instagram()
     instagram.login()
+    instagram.logout()
+    logging.info("Instagram test complete")
 
 
 if __name__ == "__main__":
